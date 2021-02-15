@@ -19,6 +19,8 @@ data_lowtide = load('lowTide.txt');
 data_hightide = load('highTide.txt'); 
 data_midtide = load('midTide.txt'); 
 
+data_bedprofile = load('prof1018.txt'); 
+
 
 % constants
 g = 9.81;                    % acceleration of gravity (m/s^2)
@@ -61,6 +63,7 @@ end
 % Visualization of mean wave height, significant wave height and rms wave
 % height for different positions cross shore of low tide 
 figure() 
+subplot(2,1,1)
 plot(Hm_tot,'-*');
 hold on 
 plot(H13_tot,'-*'); 
@@ -69,9 +72,17 @@ legend('Mean wave height', 'Significant wave height', 'RMS wave height')
 title('Mean height, significant wave height and rms wave height as a function of cross-shore position');
 ylabel('h [m]'); 
 grid on 
-xlabel('Cross-shore Position'); 
-xticks([1 2 3 4 5])
-xticklabels({'P1','P3','P4','P5','P6'}); 
+text(x,y,labels,'VerticalAlignment','bottom','HorizontalAlignment','right')
+%xlabel('Cross-shore Position'); 
+%xticks([1 2 3 4 5])
+%xticklabels({'P1','P3','P4','P5','P6'}); 
+subplot(2,1,2)
+plot(data_bedprofile(:,2)); 
+xlabel('Cross-shore Position');
+xlim([0 2520]); 
+hold on 
+
+%plot(data_bedprofile(:,1)); 
 
 
 
@@ -96,31 +107,40 @@ for ii=1:Npos  % loop on the positions
         wave_data = load(name); 
         waves_individual = zero_crossing(wave_data(:,ii),fs);
     
-        Hm_total(ii,jj) = mean(low_tide_individual(:,1)); 
-        H13_total(ii,jj) = significant_height(low_tide_individual(:,1)); 
-        Hrms_total(ii,jj) = rms_height(low_tide_individual(:,1)); 
+        Hm_total(ii,jj) = mean(waves_individual(:,1)); 
+        H13_total(ii,jj) = significant_height(waves_individual(:,1)); 
+        Hrms_total(ii,jj) = rms_height(waves_individual(:,1)); 
+        
+        
                
     end
     
 end
 
+
 %Plot of significant wave height as a function of root mean square wave
 %height 
 
-for xx = 1:n 
-    fit_wv_rms = polyfit(H13_total(:,xx),Hrms_total(:,xx),2);
-end
+%We do polyfit of all dataset 
 
-fit_wv_rms = polyfit(H13_tot,Hrms_tot,2);
+fit= polyfit(Hrms_total,H13_total,1);
 
 %Theoretical relation for 1/3 and rms
+theoretical_fit = sqrt(2)*Hrms_total; 
 
-H_theoretical = sqrt(2)*Hrms_tot; 
+figure()
+plot(fit);
+hold on 
+plot(theoretical_fit)
+
+%Theoretical relation for mean and rms
+
+Hm_theoretical = 0.89*Hrms_total; 
+
+%Real 
+H_div = Hm_total/Hrms_total; 
 
 
-%Theoretical relation for mean and rms 
-
-Hm_theoretical = 0.89*Hrms_tot; 
 
 
 
