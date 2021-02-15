@@ -26,11 +26,13 @@ rho = 1025;                  % water density (kg/m^3)
 fs = 2;                      % sampling frequency (Hz)
 Npos = 5;                    % number of cross-shore positions considered
 duration = length(data_lowtide)/fs; %seconds
-length_data = length(data_lowtide(:,1)); 
-time = linspace(0.25,duration,length_data);
-% More?
 
-% Initialisation vectors 
+length_data = length(data_lowtide(:,1)); %Length data set 
+%Creating time vector 
+time = linspace(0.25,duration,length_data);
+
+
+% Initialization vectors for low tide 
 % These vectors will be used to store the wave statistics at each position
 Hrms_tot = zeros(Npos,1);  % root mean square height (m)
 H13_tot  = zeros(Npos,1);  % significant wave height (m)
@@ -40,6 +42,7 @@ Hm_tot   = zeros(Npos,1);  % mean wave height (m)
 %     Computation of wave statistics
 % --------------------------------------
 
+%Loop for low tide only 
 
 for ii=1:Npos  % loop on the positions
     
@@ -55,43 +58,58 @@ end
 %                  Output
 % --------------------------------------
 
-% visualisation of outputs
+% Visualization of mean wave height, significant wave height and rms wave
+% height for different positions cross shore of low tide 
 figure() 
-plot(Hm_tot,'*');
+plot(Hm_tot,'-*');
 hold on 
-plot(H13_tot,'*'); 
-plot(Hrms_tot,'*'); 
+plot(H13_tot,'-*'); 
+plot(Hrms_tot,'-*'); 
 legend('Mean wave height', 'Significant wave height', 'RMS wave height')
-title('Mean, significant wave height and rms wave height as a function of position'); 
+title('Mean height, significant wave height and rms wave height as a function of cross-shore position');
+ylabel('h [m]'); 
+grid on 
+xlabel('Cross-shore Position'); 
+xticks([1 2 3 4 5])
+xticklabels({'P1','P3','P4','P5','P6'}); 
+
 
 
 %% We compute for all cases (low, mid and high tides) 
+clear ii 
+clear jj 
+
 
 % These vectors will be used to store the wave statistics at each position
 Hrms_total = zeros(Npos,3);  % root mean square height (m)
 H13_total  = zeros(Npos,3);  % significant wave height (m)
 Hm_total   = zeros(Npos,3);  % mean wave height (m)
 
+%We create an array with the names 
 array_names = ["lowTide.txt", "midTide.txt", "highTide.txt"]; 
 n = length(array_names); %Number of datasets 
 
+%We run for all datasets 
 for ii=1:Npos  % loop on the positions
     for jj= 1:n
         name = array_names(jj);
         wave_data = load(name); 
         waves_individual = zero_crossing(wave_data(:,ii),fs);
     
-        Hm_tot(ii,jj) = mean(low_tide_individual(:,1)); 
-        H13_tot(ii,jj) = significant_height(low_tide_individual(:,1)); 
-        Hrms_tot(ii,jj) = rms_height(low_tide_individual(:,1)); 
-        
-        fit_wv_rms = polyfit(H13_tot(:,jj),Hrms_tot(:,jj),2);
+        Hm_total(ii,jj) = mean(low_tide_individual(:,1)); 
+        H13_total(ii,jj) = significant_height(low_tide_individual(:,1)); 
+        Hrms_total(ii,jj) = rms_height(low_tide_individual(:,1)); 
+               
     end
     
 end
 
 %Plot of significant wave height as a function of root mean square wave
 %height 
+
+for xx = 1:n 
+    fit_wv_rms = polyfit(H13_total(:,xx),Hrms_total(:,xx),2);
+end
 
 fit_wv_rms = polyfit(H13_tot,Hrms_tot,2);
 

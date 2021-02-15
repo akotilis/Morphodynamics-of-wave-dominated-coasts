@@ -14,10 +14,12 @@ h_b = 1.45 % height sea bed [m]
 data = load('CalibP1.txt'); %mV
 
 length = length(data);
+
+%We get the duration so we can make the time vector of our series 
 duration_s = length/fs; %seconds
 duration = (length/fs)/60; %min
 
-%Calculating water depth h
+%Calculating water depth h according to manual 
 
 p = a1.*data+b1; %pressure [Pa]
 h_a = p./(rho*g); %height above sensor [m]
@@ -28,12 +30,12 @@ h_mean = mean(h); %average water depth at sensor [m]
 fprintf("The average water depth is %f\n meters", h_mean)
 
 time = linspace(0.25,duration_s,length);
-%time = [1:1:duration_s]; %time vector [seconds]
+
+
 
 %Plotting h
 
 figure()
-%plot(time,h(1:4:14400))
 plot(time,h)
 title('Water column depth as a function of time')
 xlabel('Time [s]')
@@ -47,8 +49,12 @@ hold off
 
 %Removing tide variations
 
+%Detendring the data 
 h_detrend = detrend(h);
+%Removing the mean 
 H = h - h_mean;
+
+%Plotting the data without the mean vs detrend data 
 figure()
 plot(time,H)
 hold on
