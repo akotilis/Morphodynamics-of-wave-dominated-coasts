@@ -27,18 +27,19 @@ h_mean = mean(h); %average water depth at sensor [m]
 
 fprintf("The average water depth is %f\n meters", h_mean)
 
-time = [1:1:duration_s]; %time vector [seconds]
+time = linspace(0.25,duration_s,length);
+%time = [1:1:duration_s]; %time vector [seconds]
 
 %Plotting h
 
-plot(time,h(1:4:14400))
+figure()
+%plot(time,h(1:4:14400))
+plot(time,h)
 title('Water column depth as a function of time')
 xlabel('Time [s]')
 ylabel('Water depth [m]')
-xlim([0 3600])
-
+%xlim([0 3600])
 hold on 
-
 plot([time(1) time(end)],[h_mean h_mean], '--k')
 grid on 
 legend('h(t)', 'h_{mean}')
@@ -48,9 +49,10 @@ hold off
 
 h_detrend = detrend(h);
 H = h - h_mean;
-plot(time,H(1:4:14400))
+figure()
+plot(time,H)
 hold on
-plot(time,h_detrend(1:4:14400))
+plot(time,h_detrend)
 title('Water level as a function of time')
 xlabel('Time [s]')
 ylabel('Water depth [m]')
