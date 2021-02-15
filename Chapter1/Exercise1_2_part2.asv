@@ -32,7 +32,9 @@ delta_t = 1/fs;
 P_points = [4478 4765 4790 4814 4835];      %x-locations of the sensors
 P_depths = bed_height(floor(P_points/2));   %depth of the sensors
 
-length_data = length(data_lowtide(:,1)); %Length data set 
+%Length data set 
+length_data = length(data_lowtide(:,1)); 
+
 %Creating time vector 
 time = linspace(delta_t,duration,length_data);
 
@@ -67,10 +69,10 @@ end
 % height for different positions cross shore of low tide 
 figure() 
 subplot(2,1,1)
-plot(P_points/1000,Hm_tot,'-*');
+plot(P_points/1000,Hm_tot,'*');
 hold on 
-plot(P_points/1000,H13_tot,'-*'); 
-plot(P_points/1000,Hrms_tot,'-*'); 
+plot(P_points/1000,H13_tot,'*'); 
+plot(P_points/1000,Hrms_tot,'*'); 
 legend('H_{mean}', 'H_{1/3}', 'H_{rms}')
 title('H_{mean}, H_{1/3} and H_{rms} as a function of cross-shore position');
 xlabel('Cross-shore Position [km]'); 
@@ -129,13 +131,13 @@ end
 %Using a referenence height array for the fit
 H_ref = [0 0.25 0.5 0.75 1 1.25 1.5 1.75 2]; 
 
-%We do polyfit of all the datasets
+%Using polyfit to find a linear relation between Hrms and H13
 p = polyfit(Hrms_total(:), H13_total(:),1);
 
-%Linear fit 
+%Linear fit using the slope and intercept found by polyfit
 slope = p(1);
 intercept = p(2);
-fit = slope*H_ref + p(2);
+fit = slope*H_ref + intercept;
 
 %Theoretical relation for H1/3 and Hrms
 theoretical_fit = sqrt(2)*H_ref; 
@@ -146,21 +148,39 @@ plot(Hrms_total(:), H13_total(:), 'ko', 'linewidth', 1)
 hold on
 plot(H_ref, fit, 'r-')
 hold on 
-plot(H_ref, theoretical_fit, 'b-')
+plot(H_ref, theoretical_fit, 'b--')
 legend('Measurements', 'Linear fit', 'Theoretical relation')
 xlabel('H_{1/3} [m]')
 ylabel('H_{rms} [m]')
 title('Linear relation between H_{1/3} and H_{rms}')
 xlim([0 1.6])
 
+%% Relation between Hm and Hrms
 
-% fit2 = polyfit(Hrms_total, Hm_total, 1);
+%Use polyfit to determine the linear relation between Hrms and Hm
+s = polyfit(Hrms_total, Hm_total, 1);
+slope2 = s(1);
+intercept2 = s(2);
+
+%Linear fit using the slope and intercept found by polyfit
+fit2 = slope2*H_ref + intercept2;
 
 %Theoretical relation for mean and rms
+Hm_theoretical = 0.89*H_ref; 
 
-Hm_theoretical = 0.89*Hrms_total; 
+%Plotting measurements points together with linear and theoretical fit 
+figure()
+plot(Hrms_total(:),Hm_total(:), 'ko', 'linewidth', 1)
+hold on
+plot(H_ref, fit2, 'r-')
+hold on
+plot(H_ref, Hm_theoretical, 'b--')
+legend('Measurements', 'Linear fit', 'Theoretical relation')
+xlabel('H_m [m]')
+ylabel('H_{rms} [m]')
+title('Linear relation between H_m and H_{rms}')
 
-%Real 
-H_div = Hm_total/Hrms_total; 
+%% Save the differen arrays containing the wave statistics for the full dataset
 
+save('StatisticsEgmond', 'Hm_total', 'Hrms_total', 'H13_total')
 
