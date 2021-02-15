@@ -128,11 +128,11 @@ end
 
 %% Plot of significant wave height as a function of root mean square wave height
 
-%Using a referenence height array for the fit
+%Using a reference height array for the fit
 H_ref = [0 0.25 0.5 0.75 1 1.25 1.5 1.75 2]; 
 
 %Using polyfit to find a linear relation between Hrms and H13
-p = polyfit(Hrms_total(:), H13_total(:),1);
+p = polyfit(Hrms_total, H13_total,1);
 
 %Linear fit using the slope and intercept found by polyfit
 slope = p(1);
@@ -142,9 +142,14 @@ fit = slope*H_ref + intercept;
 %Theoretical relation for H1/3 and Hrms
 theoretical_fit = sqrt(2)*H_ref; 
 
+%0.75,1.02
+%1.25, 1.732
+slope_theoretical = (1.732-1.02)/(1.25-0.75); 
+
+
 %Plotting measurements points together with linear and theoretical fit
 figure()
-plot(Hrms_total(:), H13_total(:), 'ko', 'linewidth', 1)
+plot(Hrms_total, H13_total, 'ko', 'linewidth', 1)
 hold on
 plot(H_ref, fit, 'r-')
 hold on 
@@ -168,9 +173,14 @@ fit2 = slope2*H_ref + intercept2;
 %Theoretical relation for mean and rms
 Hm_theoretical = 0.89*H_ref; 
 
+%Slope theoretical 
+%0.25, 0.2225 
+%1, 0.89
+
+slope_theor2 = (0.89-0.225)/(1-0.25); 
 %Plotting measurements points together with linear and theoretical fit 
 figure()
-plot(Hrms_total(:),Hm_total(:), 'ko', 'linewidth', 1)
+plot(Hrms_total,Hm_total, 'ko', 'linewidth', 1)
 hold on
 plot(H_ref, fit2, 'r-')
 hold on
@@ -180,7 +190,7 @@ xlabel('H_m [m]')
 ylabel('H_{rms} [m]')
 title('Linear relation between H_m and H_{rms}')
 
-%% Save the differen arrays containing the wave statistics for the full dataset
+%% Save the different arrays containing the wave statistics for the full dataset
 
 save('StatisticsEgmond', 'Hm_total', 'Hrms_total', 'H13_total')
 
