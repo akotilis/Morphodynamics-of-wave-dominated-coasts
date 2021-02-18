@@ -130,13 +130,11 @@ for jj = 1:n
     
     name = array_names(jj);
     wave_data = load(pathdata+name); 
-    %Then we run the spectrum and moment for each data set for all
-    %locations
+    %Then we run the spectrum and moment for each data set 
 for ii = 1:length(wave_data(1,:)) 
     
 [spectrum frequency edff confidenceint] = VarianceDensitySpectrum(wave_data(:,ii),nfft_15blocks,Fs);
 
-%Max spectrum to calculate peak period 
 max_spectrum = max(spectrum); 
 
 %We calculate the peak period for all spectrums and we save it 
@@ -152,18 +150,24 @@ p= 0 ; %zero order m0
 f_1 = 0; 
 f_2 = Fs/2; %Nyquist frequency (sampling frequency/2) 
 moment = spectral_moment(frequency,spectrum,f_1,f_2,p);
+
+
 Hm0(ii,jj) = 4*sqrt(moment); 
 
 %Infragravity wave height 
 f_1 = 0.005; %Hz 
 f_2 = 0.05; %Hz 
+
 moment_infra = spectral_moment(frequency,spectrum,f_1,f_2,p)
+
 Hmo_inf(ii,jj) = 4*sqrt(moment_infra);
 
 %Sea swell wave height 
 f_1 = 0.05; %Hz 
 f_2 = Fs/2; %Nyquist frequency (sampling frequency/2) 
+
 moment_swell = spectral_moment(frequency,spectrum,f_1,f_2,p)
+
 Hmo_swell(ii,jj) = 4*sqrt(moment_swell);
 
 end
