@@ -210,7 +210,7 @@ xticklabels({'P1','P3','P4','P5','P6'});
 ylabel('h[m]'); 
 grid on 
 
-save(Chapter2_waveheights,'Hm0', 'Hmo_inf', 'Hmo_swell')
+save('Chapter2_waveheights','Hm0', 'Hmo_inf', 'Hmo_swell')
 
 %Bonus question peak periods 
 figure()
