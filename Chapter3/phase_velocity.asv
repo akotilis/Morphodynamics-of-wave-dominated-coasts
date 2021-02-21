@@ -1,0 +1,5 @@
+function phase = phase_velocity(L, T) 
+%Calculates the phase velocity as 
+
+end
+
