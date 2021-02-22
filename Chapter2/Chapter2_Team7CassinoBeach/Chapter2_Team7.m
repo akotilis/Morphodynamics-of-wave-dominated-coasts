@@ -4,12 +4,17 @@ close all;
 clear all; 
 
 %Path where the data is located 
-pathdata = "/Users/maribotton/Desktop/Wave_Coasts/morphodynamics_wavecoasts/Chapter1/Chapter1_Team7CassinoBeach/";
+%pathdata = "/Users/maribotton/Desktop/Wave_Coasts/morphodynamics_wavecoasts/Chapter1/Chapter1_Team7CassinoBeach/";
 
 %Computation of the density spectrum with low tide 
-low_tide = load(pathdata+'lowTide.txt');
-high_tide = load(pathdata+'highTide.txt'); 
-mid_tide = load(pathdata+'midTide.txt'); 
+%This is with the data on another path, we put it in the same folder for
+%handing it in 
+%low_tide = load(pathdata+'lowTide.txt');
+%high_tide = load(pathdata+'highTide.txt'); 
+%mid_tide = load(pathdata+'midTide.txt');
+low_tide = load('lowTide.txt');
+high_tide = load('highTide.txt'); 
+mid_tide = load('midTide.txt'); 
 Fs = 2; %Sampling frequency Fs in Hz 
 
 %Calculating the density spectrum for last location on low tide using only
@@ -145,7 +150,8 @@ Fs = 2; %sampling frequency Hz
 for jj = 1:n
     
     name = array_names(jj);
-    wave_data = load(pathdata+name); 
+    %wave_data = load(pathdata+name); 
+    wave_data = load(name); 
     %Then we run the spectrum and moment for each data set for all
     %locations
 for ii = 1:length(wave_data(1,:)) 
@@ -189,7 +195,8 @@ end
 %Comparison between spectral wave height and significant wave height from
 %last practical 
 
-load(pathdata+'StatisticsEgmond.mat'); 
+%load(pathdata+'StatisticsEgmond.mat'); 
+load('StatisticsEgmond.mat'); 
 
 figure()
 plot(Hm0(:,1), '-*','color', 'blue'); 

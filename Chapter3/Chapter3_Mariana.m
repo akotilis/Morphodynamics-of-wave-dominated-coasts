@@ -25,6 +25,7 @@ end
 %Plot evolution of wavelength L as a function of depth 
 figure() 
 plot(water_depth, L{1}); 
+title('Evolution of the wavelength L as a function of depth'); 
 hold on 
 plot(water_depth, L{2}); 
 plot(water_depth, L{3}); 
@@ -52,10 +53,16 @@ ylabel('Ratio h/L')
 xlim([0 140])
 %Adding horizontal lines with regions of water 
 %Shallow water h/L <= 0.05 
-yline(0.05)
+h1 = yline(0.05);
 %Deep water >= 0.5
-yline(0.5)
+h2 = yline(0.5);
+set(get(get(h1(1),'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+set(get(get(h2(1),'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+text(80,0.03, 'Shallow water'); 
+text(80,0.15, 'Intermediate water'); 
+text(80,0.7, 'Deep water'); 
 
+c_theory = sqrt(g.*water_depth);
 
 %Evolution of C and Cg as a function of h 
 figure()
@@ -66,7 +73,8 @@ title('Change of phase velocity over depth with different periods')
 hold on
 plot(water_depth,c{2});
 plot(water_depth,c{3});
-legend('T = 6 s', 'T = 9 s','T = 12 s');
+plot(water_depth,c_theory);
+legend('T = 6 s', 'T = 9 s','T = 12 s','c = sqrt(gh)');
 grid on 
 xlabel('Water depth [m]')
 ylabel('C [m/s]')
@@ -77,7 +85,8 @@ title('Change of group velocity over depth with different periods')
 hold on
 plot(water_depth,cg{2});
 plot(water_depth,cg{3});
-legend('T = 6 s', 'T = 9 s','T = 12 s');
+plot(water_depth,c_theory);
+legend('T = 6 s', 'T = 9 s','T = 12 s','c = sqrt(gh)');
 grid on 
 xlabel('Water depth [m]')
 ylabel('Cg [m/s]')
@@ -106,6 +115,7 @@ end
 
 figure()
 plot(L_Egmond(:,1),'-*'); 
+title('Wavelength for each cross-shore position for low, mid and high tide')
 hold on
 plot(L_Egmond(:,2),'-*'); 
 plot(L_Egmond(:,3),'-*'); 
