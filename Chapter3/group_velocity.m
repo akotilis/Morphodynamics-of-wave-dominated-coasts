@@ -4,15 +4,12 @@ function cg = group_velocity(omega,k)
 %Inputs: 
 %omega --> Angular frequency 
 %k --> wave number 
-%Outputs: 
+%Outputs:  
+%Cg --> Group velocity [m/s] 
 
 group_vel = omega./k; 
 
 cg = group_vel; 
-
-%Output: 
-%Cg --> Group velocity 
-
 
 
 end

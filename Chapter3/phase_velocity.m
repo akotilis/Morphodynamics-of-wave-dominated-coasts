@@ -8,7 +8,7 @@ function phase_vel = phase_velocity(L, T)
 
 Vp = L./T; 
 
-phase = Vp; 
+phase_vel = Vp; 
 
 end
 
