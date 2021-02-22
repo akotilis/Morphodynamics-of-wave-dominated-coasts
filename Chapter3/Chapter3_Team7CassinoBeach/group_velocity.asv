@@ -2,12 +2,12 @@ function cg = group_velocity(c,n)
 
 %Group velocity defined as Cg = omega/k
 %Inputs: 
-%c --> phase velocity [m/s]
-%n --> propagation factor 
+%c --> ph [1/s]
+%k --> wave number 
 %Outputs:  
 %Cg --> Group velocity [m/s] 
 
-group_vel = n.*c;
+group_vel = omega./k; 
 
 cg = group_vel; 
 

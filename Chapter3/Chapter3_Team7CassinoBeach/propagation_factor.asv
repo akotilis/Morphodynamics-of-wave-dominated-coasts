@@ -10,9 +10,14 @@ function propagation = propagation_factor(k,h)
 %Output: 
 %propagation --> propagation factor n 
 
-mult = 2*k.*h; 
+%TEST 
 
-sine_part = mult./(sinh(mult)); 
+k = wavenumber{1}; 
+h = water_depth; 
+
+mult = k.*h; 
+
+sine_part = 2*mult/(sinh(2.*k.*h)); 
 
 n = 0.5.*(1+ sine_part); 
 

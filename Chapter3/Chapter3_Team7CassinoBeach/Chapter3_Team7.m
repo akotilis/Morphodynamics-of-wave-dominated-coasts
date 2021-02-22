@@ -9,7 +9,7 @@ water_depth = [0:0.5:140]; %meters
 %Constants 
 
 g  = 9.81; %Gravity, m/sˆ2 
-omega = 2*pi./periods;
+%omega = 2*pi./periods;
 
 %We run a for loop for each one of the periods 
 for ii = 1:length(periods)
@@ -23,8 +23,10 @@ L{ii} = ((g*power(periods(ii),2))/(2*pi))*tanh(wavenumber{ii}.*water_depth);
 ratio_Lh{ii} = water_depth./L{ii};
 %phase velocity with our function 
 c{ii} = phase_velocity(L{ii},periods(ii)); 
+%Propagation factor with our function 
+prop_factor{ii} = propagation_factor(wavenumber{ii},water_depth); 
 %group velocity with our function  
-cg{ii} = group_velocity(omega(ii),wavenumber{ii}); 
+cg{ii} = group_velocity(c{ii},prop_factor{ii}); 
 end
 
 %Plot evolution of wavelength L as a function of depth 
