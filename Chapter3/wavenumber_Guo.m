@@ -8,19 +8,23 @@ function wavenumber = wavenumber_Guo(T,h)
 %Output: 
 %Wave number 
 
-omega = 2*pi/T;
+
+omega = 2*pi/T; %Frequency (1/second) 
 g = 9.81; %Gravity constant [m/sˆ2] 
 
-x = h*omega./sqrt(g*h); 
+x = h*omega./sqrt(g*h); %As shown in the manual 
 
-beta = 2.4908; 
+beta = 2.4908; %value from the manual 
 
-exponential = exp(-power(x,beta)); 
+exponential = exp(-power(x,beta)); %We calculate the exponential term separately to facilitate 
+%the calculation of y 
 
 y = (x.*x).*power(1 - exponential,-1/beta);  
 
+%We calculate the wavenumber
 k = y./h;
 
+%We return the wave number 
 wavenumber = k; 
 
 end
