@@ -140,6 +140,37 @@ xticks([1 2 3 4 5])
 legend('Low tide (T = 7.58 s)', 'Mid tide (T = 6.69 s)', 'High tide (T = 5.54 s)'); 
 grid on 
 
+% h/L ratio for Egmond data
+
+%Calculation of ratios
+ratio1=mean_waterdepth./L_Egmond(1,:);  
+ratio2=mean_waterdepth./L_Egmond(2,:);
+ratio3=mean_waterdepth./L_Egmond(3,:);
+
+%Scatter plot with ratios for each period (and therefore tide) as a function of water depth. 
+figure (1)
+scatter(mean_waterdepth(1,:),ratio1(1,:));
+hold on 
+scatter(mean_waterdepth(2,:),ratio2(2,:))
+hold on 
+scatter(mean_waterdepth(3,:),ratio3(3,:))
+%Adding horizontal lines with regions of water 
+%Shallow water h/L <= 0.05 
+yline(0.05, '--')
+%Deep water >= 0.5
+yline(0.5, '--')
+xlabel('Water depth [m]')
+ylabel('Ratio h/L')
+ylim([0,0.55])
+xlim([1, 5])
+legend('T = 7.58 s (low tide)', 'T = 6.69 s (mid tide)', 'T = 5.54 s (high tide)','location','east')
+title('Ratio h/L as a function of water depth for different periods T')
+text(2.75,0.035,'Shallow')
+text(2.75,0.065,'Intermediate')
+text(2.75,0.49,'Intermediate')
+text(2.75,0.515,'Deep')
+grid on
+
 
 
 
