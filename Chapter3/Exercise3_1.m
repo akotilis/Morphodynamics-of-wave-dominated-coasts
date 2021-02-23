@@ -23,9 +23,12 @@ L{ii} = ((g*power(periods(ii),2))/(2*pi))*tanh(wavenumber{ii}.*water_depth);
 ratio_Lh{ii} = water_depth./L{ii};
 %phase velocity with our function 
 c{ii} = phase_velocity(L{ii},periods(ii)); 
+%Propagation factor with our function 
+prop_factor{ii} = propagation_factor(wavenumber{ii},water_depth); 
 %group velocity with our function  
-cg{ii} = group_velocity(omega(ii),wavenumber{ii}); 
+cg{ii} = group_velocity(c{ii},prop_factor{ii}); 
 end
+
 
 %Plot evolution of wavelength L as a function of depth 
 figure() 
@@ -165,4 +168,5 @@ text(2.75,0.065,'Intermediate')
 text(2.75,0.49,'Intermediate')
 text(2.75,0.515,'Deep')
 grid on
+
 
