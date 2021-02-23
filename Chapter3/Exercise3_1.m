@@ -8,7 +8,7 @@ water_depth = [0:0.5:140]; %meters
 
 %Constants 
 
-g  = 9.81; %Gravity, m/s?2 
+g  = 9.81; %Gravity, m/sˆ2 
 omega = 2*pi./periods;
 
 %We run a for loop for each one of the periods 
@@ -22,17 +22,15 @@ L{ii} = ((g*power(periods(ii),2))/(2*pi))*tanh(wavenumber{ii}.*water_depth);
 %ratio h/L
 ratio_Lh{ii} = water_depth./L{ii};
 %phase velocity with our function 
-c{ii} = phase_velocity(L{ii},periods(ii));
-%Omega 
-omega(ii) = 2*pi./periods(ii);
+c{ii} = phase_velocity(L{ii},periods(ii)); 
 %group velocity with our function  
 cg{ii} = group_velocity(omega(ii),wavenumber{ii}); 
 end
 
-
 %Plot evolution of wavelength L as a function of depth 
 figure() 
 plot(water_depth, L{1}); 
+title('Evolution of the wavelength L as a function of depth'); 
 hold on 
 plot(water_depth, L{2}); 
 plot(water_depth, L{3}); 
@@ -60,10 +58,17 @@ ylabel('Ratio h/L')
 xlim([0 140])
 %Adding horizontal lines with regions of water 
 %Shallow water h/L <= 0.05 
-yline(0.05)
+h1 = yline(0.05);
 %Deep water >= 0.5
-yline(0.5)
+h2 = yline(0.5);
+set(get(get(h1(1),'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+set(get(get(h2(1),'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+text(80,0.03, 'Shallow water'); 
+text(80,0.15, 'Intermediate water'); 
+text(80,0.7, 'Deep water'); 
 
+%Calculating the theoretical speed 
+c_theory = sqrt(g.*water_depth);
 
 %Evolution of C and Cg as a function of h 
 figure()
@@ -74,7 +79,9 @@ title('Change of phase velocity over depth with different periods')
 hold on
 plot(water_depth,c{2});
 plot(water_depth,c{3});
-legend('T = 6 s', 'T = 9 s','T = 12 s');
+%Theoretical c 
+plot(water_depth,c_theory);
+legend('T = 6 s', 'T = 9 s','T = 12 s','c = sqrt(gh)');
 grid on 
 xlabel('Water depth [m]')
 ylabel('C [m/s]')
@@ -85,33 +92,37 @@ title('Change of group velocity over depth with different periods')
 hold on
 plot(water_depth,cg{2});
 plot(water_depth,cg{3});
-legend('T = 6 s', 'T = 9 s','T = 12 s');
+%Theoretical c 
+plot(water_depth,c_theory);
+legend('T = 6 s', 'T = 9 s','T = 12 s','c = sqrt(gh)');
 grid on 
 xlabel('Water depth [m]')
 ylabel('Cg [m/s]')
 
-
 %% 3.2 Egmond Data 
 
+%Loading data
 mean_waterdepth = load('MeanWaterDepth.txt'); 
 mean_waterdepth = mean_waterdepth';
+
 %Periods from Table 9.1 of the manual 
-
 %In order: low tide, mid tide and high tide 
-
 periods_tides = [7.58 6.69 5.54]; %seconds 
 
 %We run the loop for each tide 
 for ii = 1:length(periods_tides(1,:))
     %We run the loop through each position 
       for jj = 1:length(mean_waterdepth(1,:))
-          
+
+%We calculate the wave number and L for each tide for all cross-shore
+%positions with their correspondant period
 wavenumber_Egmond(ii,jj) = wavenumber_Guo(periods_tides(ii),mean_waterdepth(ii,jj));
 L_Egmond(ii,jj) = ((g*power(periods_tides(ii),2))/(2*pi))*tanh(wavenumber_Egmond(ii,jj).*mean_waterdepth(ii,jj));                       
     end
     
 end
 
+%Plot of wavelength for each cross-shore position for all tides
 figure()
 plot(L_Egmond(1,:),'-*'); 
 hold on
@@ -126,20 +137,10 @@ grid on
 
 %% h/L ratio for Egmond data
 
-%calculation of wavenumber
-for i=1:length(periods_tides);                                   
-    for j=1:mean_waterdepth(1,:);                                                   
-    k(i,j)=wavenumber_Guo(periods_tides(i),mean_waterdepth(i,j));
-    end
-end 
-
-%Calculation of wavelength
-L=(2*pi)./k;
-
 %Calculation of ratios
-ratio1=mean_waterdepth./L(1,:);  
-ratio2=mean_waterdepth./L(2,:);
-ratio3=mean_waterdepth./L(3,:);
+ratio1=mean_waterdepth./L_Egmond(1,:);  
+ratio2=mean_waterdepth./L_Egmond(2,:);
+ratio3=mean_waterdepth./L_Egmond(3,:);
 
 %Scatter plot with ratios for each period (and therefore tide) as a function of water depth. 
 figure (1)
@@ -164,6 +165,4 @@ text(2.75,0.065,'Intermediate')
 text(2.75,0.49,'Intermediate')
 text(2.75,0.515,'Deep')
 grid on
-
-
 
