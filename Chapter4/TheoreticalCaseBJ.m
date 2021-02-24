@@ -33,31 +33,66 @@ hmin = 0.2;     % Minimal water depth for computation
 %----------------------------------------------------------------------------------
 %waves = BJmodelEmma(Hrms0,T0,Zeta,theta0,profile,hmin);
 
-Zeta = [-1 0 1]
+Zeta = [-1 0 1]; %meters
+theta0 = 0;
+Hrms0 = 1;
+
 Title = ["Zeta = -1m", "Zeta = 0m", "Zeta = 1m"];
 
 for i=1:length(Zeta);
     waves(i) = BJmodelEmma(Hrms0,T0,Zeta(i),theta0,profile,hmin);
-    figure(i);
-    subplot(5,1,1); plot(waves(i).x,waves(i).Hrms)
-    title(Title(i))
-    ylabel('Hrms (m)')
-    xlim([0,500]);
-    subplot(5,1,2); plot(waves(i).x,waves(i).z,'k')
-    hold on; plot(waves(i).x,Zeta(i)*ones(size(x)),'-.')
-    ylabel('zb (m)')
-    xlim([0,500]);
-    subplot(5,1,3); plot(waves(i).x,waves(i).Dbr)
-    ylabel('D_{Br} (W/m^2)')
-    xlim([0,500]);
-    subplot(5,1,4); plot(waves(i).x,waves(i).Dr)
-    xlim([0,500]);
-    ylabel('D_r (W/m^2)')
-    subplot(5,1,5); plot(waves(i).x,waves(i).eta)
-    xlim([0,500]);
-    xlabel('x (m)')
-    ylabel('eta (m)')
+%     figure(i);
+%     subplot(5,1,1); plot(waves(i).x,waves(i).Hrms)
+%     title(Title(i))
+%     ylabel('Hrms (m)')
+%     xlim([0,500]);
+%     subplot(5,1,2); plot(waves(i).x,waves(i).z,'k')
+%     hold on; plot(waves(i).x,Zeta(i)*ones(size(x)),'-.')
+%     ylabel('zb (m)')
+%     xlim([0,500]);
+%     subplot(5,1,3); plot(waves(i).x,waves(i).Dbr)
+%     ylabel('D_{Br} (W/m^2)')
+%     xlim([0,500]);
+%     subplot(5,1,4); plot(waves(i).x,waves(i).Dr)
+%     xlim([0,500]);
+%     ylabel('D_r (W/m^2)')
+%     subplot(5,1,5); plot(waves(i).x,waves(i).eta)
+%     xlim([0,500]);
+%     xlabel('x (m)')
+%     ylabel('eta (m)')
 end 
+
+figure();
+subplot(5,1,1); plot(waves(1).x,waves(1).Hrms)
+hold on; plot(waves(2).x, waves(2).Hrms)
+hold on; plot(waves(3).x, waves(3).Hrms)
+title('zeta = -1, 0 and 1 m')
+ylabel('Hrms (m)')
+xlim([0,500]);
+subplot(5,1,2); plot(waves(1).x,waves(1).z,'k')
+hold on; plot(waves(2).x, waves(2).z, 'k')
+hold on; plot(waves(3).x, waves(3).z, 'k')
+hold on; plot(waves(1).x,Zeta(1)*ones(size(x)),'-.')
+hold on; plot(waves(2).x,Zeta(2)*ones(size(x)),'-.')
+hold on; plot(waves(3).x,Zeta(3)*ones(size(x)),'-.')
+ylabel('zb (m)')
+xlim([0,500]);
+subplot(5,1,3); plot(waves(1).x,waves(1).Dbr)
+hold on; plot(waves(2).x, waves(2).Dbr)
+hold on; plot(waves(3).x, waves(3).Dbr)
+ylabel('D_{Br} (W/m^2)')
+xlim([0,500]);
+subplot(5,1,4); plot(waves(1).x,waves(1).Dr)
+hold on; plot(waves(2).x, waves(2).Dr)
+hold on; plot(waves(3).x, waves(3).Dr)
+xlim([0,500]);
+ylabel('D_r (W/m^2)')
+subplot(5,1,5); plot(waves(1).x,waves(1).eta)
+hold on; plot(waves(2).x, waves(2).eta)
+hold on; plot(waves(3).x, waves(3).eta)
+xlim([0,500]);
+xlabel('x (m)')
+ylabel('eta (m)')
 
 
 %----------------------------------------------------------------------------------
@@ -66,33 +101,59 @@ end
 %----------------------------------------------------------------------------------
 
 
-Zeta = 0
-Hrms0 = [0.5, 2]
+Zeta = 0 %meters
+Hrms0 = [0.5, 2]; %meters
+theta0=0;
 Title = ["Hrms0 = 0.5m", "Hrms0 = 2m"];
 
 for i=1:length(Hrms0);
     waves(i) = BJmodelEmma(Hrms0(i),T0,Zeta,theta0,profile,hmin);
-    figure(i);
-    subplot(5,1,1); plot(waves(i).x,waves(i).Hrms)
-    title(Title(i))
-    ylabel('Hrms (m)')
-    xlim([0,500]);
-    subplot(5,1,2); plot(waves(i).x,waves(i).z,'k')
-    hold on; plot(waves(i).x,Zeta*ones(size(x)),'-.')
-    ylabel('zb (m)')
-    xlim([0,500]);
-    subplot(5,1,3); plot(waves(i).x,waves(i).Dbr)
-    ylabel('D_{Br} (W/m^2)')
-    xlim([0,500]);
-    subplot(5,1,4); plot(waves(i).x,waves(i).Dr)
-    xlim([0,500]);
-    ylabel('D_r (W/m^2)')
-    subplot(5,1,5); plot(waves(i).x,waves(i).eta)
-    xlim([0,500]);
-    xlabel('x (m)')
-    ylabel('eta (m)')
+%     figure(i);
+%     subplot(5,1,1); plot(waves(i).x,waves(i).Hrms)
+%     title(Title(i))
+%     ylabel('Hrms (m)')
+%     xlim([0,500]);
+%     subplot(5,1,2); plot(waves(i).x,waves(i).z,'k')
+%     hold on; plot(waves(i).x,Zeta*ones(size(x)),'-.')
+%     ylabel('zb (m)')
+%     xlim([0,500]);
+%     subplot(5,1,3); plot(waves(i).x,waves(i).Dbr)
+%     ylabel('D_{Br} (W/m^2)')
+%     xlim([0,500]);
+%     subplot(5,1,4); plot(waves(i).x,waves(i).Dr)
+%     xlim([0,500]);
+%     ylabel('D_r (W/m^2)')
+%     subplot(5,1,5); plot(waves(i).x,waves(i).eta)
+%     xlim([0,500]);
+%     xlabel('x (m)')
+%     ylabel('eta (m)')
 end 
 
+figure();
+subplot(5,1,1); plot(waves(1).x,waves(1).Hrms)
+hold on; plot(waves(2).x, waves(2).Hrms, '--')
+title('Hrms = 0.5 and 2 m')
+ylabel('Hrms (m)')
+xlim([0,500]);
+subplot(5,1,2); plot(waves(1).x,waves(1).z,'k')
+hold on; plot(waves(2).x, waves(2).z, 'k')
+hold on; plot(waves(1).x,Zeta*ones(size(x)),'-.')
+hold on; plot(waves(1).x,Zeta*ones(size(x)),'-.')
+ylabel('zb (m)')
+xlim([0,500]);
+subplot(5,1,3); plot(waves(1).x,waves(1).Dbr)
+hold on; plot(waves(2).x, waves(2).Dbr)
+ylabel('D_{Br} (W/m^2)')
+xlim([0,500]);
+subplot(5,1,4); plot(waves(1).x,waves(1).Dr)
+hold on; plot(waves(2).x, waves(2).Dr)
+xlim([0,500]);
+ylabel('D_r (W/m^2)')
+subplot(5,1,5); plot(waves(1).x,waves(1).eta)
+hold on; plot(waves(2).x, waves(2).eta)
+xlim([0,500]);
+xlabel('x (m)')
+ylabel('eta (m)')
 
 
 %----------------------------------------------------------------------------------
@@ -100,31 +161,57 @@ end
 %       variable theta
 %----------------------------------------------------------------------------------
 
-
-Zeta = 0
-Hrms0 = 1
-theta0 = [22.5, 45] %degrees
+Zeta = 0 %meters
+Hrms0 = 1 %meters
+theta0 = [22.5, 45]; %degrees
 Title = ["theta0 = 22.5 degrees", "theta0 = 45 degrees"];
 
 for i=1:length(theta0);
     waves(i) = BJmodelEmma(Hrms0,T0,Zeta,theta0(i),profile,hmin);
-    figure(i);
-    subplot(5,1,1); plot(waves(i).x,waves(i).Hrms)
-    title(Title(i))
-    ylabel('Hrms (m)')
-    xlim([0,500]);
-    subplot(5,1,2); plot(waves(i).x,waves(i).z,'k')
-    hold on; plot(waves(i).x,Zeta*ones(size(x)),'-.')
-    ylabel('zb (m)')
-    xlim([0,500]);
-    subplot(5,1,3); plot(waves(i).x,waves(i).Dbr)
-    ylabel('D_{Br} (W/m^2)')
-    xlim([0,500]);
-    subplot(5,1,4); plot(waves(i).x,waves(i).Dr)
-    xlim([0,500]);
-    ylabel('D_r (W/m^2)')
-    subplot(5,1,5); plot(waves(i).x,waves(i).eta)
-    xlim([0,500]);
-    xlabel('x (m)')
-    ylabel('eta (m)')
-end 
+%     figure();
+%     subplot(5,1,1); plot(waves(i).x,waves(i).Hrms)
+%     title(Title(i))
+%     ylabel('Hrms (m)')
+%     xlim([0,500]);
+%     subplot(5,1,2); plot(waves(i).x,waves(i).z,'k')
+%     hold on; plot(waves(i).x,Zeta*ones(size(x)),'-.')
+%     ylabel('zb (m)')
+%     xlim([0,500]);
+%     subplot(5,1,3); plot(waves(i).x,waves(i).Dbr)
+%     ylabel('D_{Br} (W/m^2)')
+%     xlim([0,500]);
+%     subplot(5,1,4); plot(waves(i).x,waves(i).Dr)
+%     xlim([0,500]);
+%     ylabel('D_r (W/m^2)')
+%     subplot(5,1,5); plot(waves(i).x,waves(i).eta)
+%     xlim([0,500]);
+%     xlabel('x (m)')
+%     ylabel('eta (m)')
+end
+
+figure();
+subplot(5,1,1); plot(waves(1).x,waves(1).Hrms)
+hold on; plot(waves(2).x, waves(2).Hrms, '--')
+title('theta = 22.5 and 45 degrees')
+ylabel('Hrms (m)')
+xlim([0,500]);
+subplot(5,1,2); plot(waves(1).x,waves(1).z,'k')
+hold on; plot(waves(2).x, waves(2).z, 'k')
+hold on; plot(waves(1).x,Zeta*ones(size(x)),'-.')
+hold on; plot(waves(2).x,Zeta*ones(size(x)),'-.')
+ylabel('zb (m)')
+xlim([0,500]);
+subplot(5,1,3); plot(waves(1).x,waves(1).Dbr)
+hold on; plot(waves(2).x, waves(2).Dbr)
+ylabel('D_{Br} (W/m^2)')
+xlim([0,500]);
+subplot(5,1,4); plot(waves(1).x,waves(1).Dr)
+hold on; plot(waves(2).x, waves(2).Dr)
+xlim([0,500]);
+ylabel('D_r (W/m^2)')
+subplot(5,1,5); plot(waves(1).x,waves(1).eta)
+hold on; plot(waves(2).x, waves(2).eta)
+xlim([0,500]);
+xlabel('x (m)')
+ylabel('eta (m)')
+
