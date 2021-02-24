@@ -31,18 +31,36 @@ hmin = 0.2;     % Minimal water depth for computation
 %------------------------------------------------
 %       Computation of wave characteristics
 %------------------------------------------------
+%waves = BJmodelEmma(Hrms0,T0,Zeta,theta0,profile,hmin);
 
-waves = BJmodel(Hrms0,T0,Zeta,theta0,profile,hmin);
+Zeta = [-1 0 1]
+
+for i=1:length(Zeta);
+    waves(i) = BJmodelEmma(Hrms0,T0,Zeta(i),theta0,profile,hmin);
+    figure(i);
+    subplot(5,1,1); plot(waves(i).x,waves(i).Hrms)
+    title('title')
+    ylabel('Hrms (m)')
+    xlim([0,500]);
+    subplot(5,1,2); plot(waves(i).x,waves(i).z,'k')
+    hold on; plot(waves(i).x,Zeta(i)*ones(size(x)),'-.')
+    ylabel('zb (m)')
+    xlim([0,500]);
+    subplot(5,1,3); plot(waves(i).x,waves(i).Dbr)
+    ylabel('D_{Br} (W/m^2)')
+    xlim([0,500]);
+    subplot(5,1,4); plot(waves(i).x,waves(i).Dr)
+    xlim([0,500]);
+    ylabel('D_r (W/m^2)')
+    subplot(5,1,5); plot(waves(i).x,waves(i).eta)
+    xlim([0,500]);
+    xlabel('x (m)')
+    ylabel('eta (m)')
+end 
+
+
 
 
 %------------------------------------
 %           Visualisation 
 %------------------------------------
-
-figure;
-subplot(2,1,1); plot(waves.x,waves.Hrms)
-ylabel('Hrms (m)')
-subplot(2,1,2); plot(waves.x,waves.z,'k')
-hold on; plot(waves.x,Zeta*ones(size(x)),'-.')
-xlabel('x (m)')
-ylabel('zb (m)')
