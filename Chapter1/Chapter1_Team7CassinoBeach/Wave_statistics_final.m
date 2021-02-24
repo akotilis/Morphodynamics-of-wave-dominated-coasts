@@ -60,7 +60,7 @@ for ii=1:Npos  % loop on the positions
     Hrms_tot(ii) = rms_height(H); 
     
 end
-
+cl
 % --------------------------------------
 %                  Output
 % --------------------------------------
