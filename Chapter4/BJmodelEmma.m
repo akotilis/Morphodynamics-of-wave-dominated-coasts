@@ -96,8 +96,8 @@ E(1)     = 1/8*rho*g*Hrms(1)^2;                  % Wave energy
 k(1)     = wavenumber_Guo(T0,ht(1));             % Wave number
 L(1)     = 2*pi./k(1);                           % Wavelength
 c(1)     = phase_velocity(L(1), T0);             % Phase celerity
-n(1)     = propagation_factor(k(1),ht(1));       % ratio group velocity/phase celerity (used in the computation of GROUPVELOCITY and RADIATIONSTRESS)
-cg(1)    = group_velocity(c(1),n(1));            % Group celerity
+cg(1)    = group_velocity(c(1),propagation_factor(k(1),ht(1)));            % Group celerity
+n(1)     = cg(1)/c(1);                           % ratio group velocity/phase celerity (used in the computation of GROUPVELOCITY and RADIATIONSTRESS)
 theta(1) = theta0*pi*180;                        % Wave direction in RAD
 % ------------------------------------------------
 Er(1)    = 0;                         % Roller energy. Needed for computation of Sxx(1), and therefore initialized at 0.
@@ -153,8 +153,8 @@ for gid = 1:lastWet       % loop on the cross-shore positions
          k(gid+1) = wavenumber_Guo(T0, ht(gid+1));                   % wave number
          L(gid+1) = 2*pi./k(gid+1);                                  % wavelength
          c(gid+1) = phase_velocity(L(gid+1),T0);                     % wave celerity
-         n(gid+1) = propagation_factor(k(gid+1),ht(gid+1));          % group velocity/phase celerity
-         cg(gid+1) = group_velocity(c(gid+1),n(gid+1));              % group velocity
+         cg(gid+1) = group_velocity(c(gid+1),propagation_factor(k(gid+1),ht(gid+1)));              % group velocity
+         n(gid+1) = cg(gid+1)/c(gid+1) ;          % group velocity/phase celerity
          theta(gid+1) = asin(c(gid+1)*sin(theta(gid))/c(gid));       % wave direction (using Snells law)
         
         % %energy balance
