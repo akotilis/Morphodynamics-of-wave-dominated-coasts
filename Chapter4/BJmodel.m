@@ -92,11 +92,11 @@ Hrms(1)  = Hrms0;                     % Root mean square height
 eta(1)   = 0;                         % Set up
 ht(1)    = -z(1) + eta(1) + Zeta;     % Total water depth (includes set-up)
 % ----------------- TO BE FILLED IN ---------------
-E(1)     = (1/8)*rho*g*power(Hrms0,2) % Wave energy
-k(1)     = wavenumber_Guo(T0,Zeta) % Wave number
-L(1)     = ((g*power(T0,2))/(2*pi))*tanh(k(1).*Zeta);  wavelength
+E(1)     = (1/8)*rho*g*power(Hrms0,2); % Wave energy
+k(1)     = wavenumber_Guo(T0,ht(1)); % Wave number
+L(1)     = ((g*power(T0,2))/(2*pi))*tanh(k(1).*ht(1));  wavelength
 c(1)     = phase_velocity(L(1),period) % Phase celerity
-cg(1)    = group_velocity(c(1),propagation_factor(k(1),Zeta);  % Group celerity
+cg(1)    = group_velocity(c(1),propagation_factor(k(1),ht(1));  % Group celerity
 n(1)     = cg(1)/c(1);                      % ratio group velocity/phase celerity (used in the computation of GROUPVELOCITY and RADIATIONSTRESS)
 theta(1) = theta0*pi/180;                       % Wave direction in RAD
 % ------------------------------------------------
@@ -150,7 +150,7 @@ for gid = 1:lastWet       % loop on the cross-shore positions
         dx = x(gid+1) - x(gid);                                 % cross-shore gridsize
         ht(gid+1) = -z(gid+1) + eta(gid+1) + Zeta;              % total water level
         % ---------------- TO BE FILLED IN ---------------
-        % k(gid+1) = wavenumber_Guo(T0,Zeta(gid+1));                      % wave number
+        % k(gid+1) = wavenumber_Guo(T0,Zeta(gid+1));            % wave number
         % c(gid+1) = ???                                        % wave celerity
         % n(gid+1) = ???                                        % group velocity/phase celerity
         % cg(gid+1) = ???                                       % group velocity
