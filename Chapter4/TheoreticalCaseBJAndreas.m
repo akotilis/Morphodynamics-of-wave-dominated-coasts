@@ -45,7 +45,7 @@ end
 
 % Figure for 4.2 (3rd task)
 figure(); 
-subplot(5,1,1); plot(waves(2).x, waves(2).Hrms); ylabel('Hrms(m)');
+subplot(5,1,1); plot(waves(2).x, waves(2).Hrms); ylabel('Hrms,0(m)');
 xlim([0 500]); ylim([0 2]); hold on;title('Water level \zeta = 0m');
 
 subplot(5,1,2); plot(waves(2).x, waves(2).eta); ylabel('set-up (m)');xlim([0 500]); ylim([-0.2 0.2]); hold on;
@@ -61,14 +61,13 @@ hold on; plot(waves(2).x, waves(2).Hrms)
 hold on; plot(waves(3).x, waves(3).Hrms) 
 legend('\zeta = -1', '\zeta =0', '\zeta = 1'); legend('location','northeast');
 title('Water level \zeta = -1m, \zeta=0m and \zeta= 1m')
-ylabel('Hrms (m)')
+ylabel('Hrms,0 (m)')
 xlim([0,500]); ylim([0 2]); 
 
 subplot(5,1,2); plot(waves(1).x,waves(1).eta)
 hold on; plot(waves(2).x, waves(2).eta)
 hold on; plot(waves(3).x, waves(3).eta)
-xlim([0 500]); ylim([-0.2 0.2]);
-xlabel('x (m)'); ylabel('set-up (m)');
+xlim([0 500]); ylim([-0.2 0.2]); ylabel('set-up (m)');
 
 
 
@@ -94,7 +93,7 @@ hold on; plot(waves(3).x, waves(3).z, 'k')
 hold on; plot(waves(1).x, Zeta(1)*ones(size(x)),'-.')
 hold on; plot(waves(2).x, Zeta(2)*ones(size(x)), '-.')
 hold on; plot(waves(3).x, Zeta(3)*ones(size(x)),'-.')
-ylabel('zb (m)')
+ylabel('zb (m)'); xlabel('x (m)');
 xlim([0,500]); ylim([-20 10]);
 
 %%
@@ -117,13 +116,13 @@ figure();
 subplot(5,1,1); plot(waves(1).x,waves(1).Hrms)
 hold on; plot(waves(2).x, waves(2).Hrms)
 title('Hrms = 0.5m and 2 m, \zeta =0m')
-ylabel('Hrms (m)'); legend('Hrms=0.5', 'Hrms=2')
+ylabel('Hrms,0 (m)'); legend('Hrms=0.5', 'Hrms=2')
 xlim([0,500]); ylim([0 3])
 subplot(5,1,5); plot(waves(1).x,waves(1).z,'k')
 hold on; plot(waves(2).x, waves(2).z, 'k')
 hold on; plot(waves(1).x,Zeta*ones(size(x)),'-.')
 hold on; plot(waves(1).x,Zeta*ones(size(x)),'-.')
-ylabel('zb (m)')
+ylabel('zb (m)'); xlabel('x (m)');
 xlim([0,500]);
 subplot(5,1,3); plot(waves(1).x,waves(1).Dbr)
 hold on; plot(waves(2).x, waves(2).Dbr)
@@ -136,7 +135,7 @@ ylabel('D_r (W/m^2)')
 subplot(5,1,2); plot(waves(1).x,waves(1).eta)
 hold on; plot(waves(2).x, waves(2).eta)
 xlim([0,500]); ylim([-0.2 0.4])
-xlabel('x (m)')
+
 ylabel('set-up (m)')
 
 
