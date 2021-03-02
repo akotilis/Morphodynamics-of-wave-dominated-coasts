@@ -9,6 +9,7 @@ function rmse = rootmeansquare_error(x_obs,x_model)
 %Output: 
 %rmse --> Root mean square error 
 
+%The if checks if both vectors are the same length 
 if length(x_obs) == length(x_model)
    sum = 0;  
     for ii = 1:length(x_obs) 

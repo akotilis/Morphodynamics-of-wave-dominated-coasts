@@ -1,4 +1,4 @@
-function waves = BJmodel(Hrms0,T0,Zeta,theta0,profile,hmin)
+function waves = BJmodelEmma(Hrms0,T0,Zeta,theta0,profile,hmin)
 % BJmodel compute waves over profile
 %   WAVES = BJmodel(Hrms0,T0,Zeta,theta0,profile,hmin)
 %   returns a structure WAVES with the values of the wave properties at

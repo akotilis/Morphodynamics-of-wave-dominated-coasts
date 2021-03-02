@@ -365,7 +365,7 @@ position_sensors = [4478 4765 4790 4814 4835]; %meters
      %We create the vertical subplots showing the modelled Hrms and
      %comparing it to the observed Hrms calculated on Chapter 1 for each
      %tide 
-     figure(1)
+     figure(5)
      %We iterate over the different vertical subplots to plot each tide 
      subplot(4,1,ii)
      %We plot the modelled Hrms 
@@ -394,7 +394,7 @@ position_sensors = [4478 4765 4790 4814 4835]; %meters
     
     %Figure to check that the interpolation of the modelled Hrms is done
     %correctly 
-    figure(2) 
+    figure(6) 
     subplot(3,1,ii) 
     %Plot of the interpolated Hrms 
     plot(position_sensors,interpolation_data{ii}, '*')
@@ -418,7 +418,7 @@ position_sensors = [4478 4765 4790 4814 4835]; %meters
  
 %Last subplot of Figure 1 with the bed evolution and determining regions
 %for each one of the tides 
-figure(1)
+figure(5)
 subplot(4,1,4)
 hold on;
 %Plot of the bed profile 
