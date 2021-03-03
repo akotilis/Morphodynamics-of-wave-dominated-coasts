@@ -65,13 +65,9 @@ for ii = 1:length(theta)
 waves = BJmodelEmma(Hrms0(ii),T0(ii),Zeta(ii),theta(ii),profile,hmin);
 
 
-currents(:,ii) = longshoreCurrent(profile,dzetady(ii),wcross(ii),wlong(ii),waves.c,waves.theta,waves.Dr,waves.ht,waves.st,ka,nu,0);
+currents(:,ii) = longshoreCurrent(profile,dzetady(ii),wcross(ii),wlong(ii),waves.c,waves.theta,waves.Dr,waves.ht,waves.st,ka,nu,0)
 
-%Interpolation of the current profile to the position of the sensors 
-interpolated_v{ii} = interp1(waves.x,currents(:,ii),position_sensors);
-
-rmse(ii) = rootmeansquare_error(currents_data(:,ii),interpolated_v{ii});
-sprintf('The root mean square error for %s is %d', names{ii}, rmse(ii))
+%interpolated_v(:,ii) = interp1(waves.x,currents(:,ii),position_sensors);
 
 figure() 
 %Plot of modelled Hrms 
@@ -85,15 +81,14 @@ xlim([4000 max(waves.x)])
 %Plot of the cross-shore distribution of the longshore current
 subplot(3,1,2)
 plot(waves.x, currents(:,ii))
-hold on;
 title('Modelled mean alongshore current and measured values') 
 xlabel('x(m)') 
 ylabel('v(m/s)')
 xlim([4000 max(waves.x)])
 grid on 
-plot(position_sensors,currents_data(:,ii), '*') 
 legend('Modelled along-shore current', 'Measured data'); 
-%Plot of the bed profile 
+hold on;
+plot(position_sensors,currents_data(:,ii), '*') 
 subplot(3,1,3) 
 plot(bed_profile(:,1),bed_profile(:,2))
 xlabel('x(m)') 
@@ -102,8 +97,6 @@ title('Bed level evolution')
 grid on 
      
 end
-
-
  
 %% Part 5.3: Complementary analysis 
 

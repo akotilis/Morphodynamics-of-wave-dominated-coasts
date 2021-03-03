@@ -53,8 +53,7 @@ Cd = 0.002;  % Friction factor for the wind
 theta = theta*pi/180;                                % Angle of incidence in rad
 wtot = sqrt(wcross^2+wlong^2);                       % Total wind velocity 
 fc = 0.015*(ka./h_tot).^(1/3);                       % Manning-Strickler formulation
-
-
+ 
 % --------------------------------------------------------------------
 %       Computation of the cross-shore vectors of forcing terms
 % --------------------------------------------------------------------
@@ -68,6 +67,9 @@ Fwind = 1/rho.*(rhoa*Cd.*wtot.*wlong);
 
 % 3. waves
 Fwaves = -(1/rho)*-sin(theta)./c.*Dr;
+
+%Initialization of F
+F = zeros(length(Ftide(:,1)),1); 
 
 if type == 0 
 % compute total force F in m^2/s^2
