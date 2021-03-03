@@ -55,10 +55,10 @@ fc = 0.015*(ka./h_tot).^(1/3);                       % Manning-Strickler formula
 %       Computation of the cross-shore vectors of forcing terms
 % --------------------------------------------------------------------
 % 1. tidal forcing (alongshore gradient dzetady)
-% Ftide = dzetady; 
+  Ftide = dzetady; 
 
 % 2. wind (tsy)                                    
-% Fwind = rhoa*Cd*wtot*wlong;  
+  Fwind = rhoa*Cd*wtot*wlong;  
 
 % 3. waves
 % Fwaves = (1/8)*rho*g*Hrms*Hrms*(cg/c)*cos(theta)*sin(theta) + Er*cos(theta)*sin(theta); 
