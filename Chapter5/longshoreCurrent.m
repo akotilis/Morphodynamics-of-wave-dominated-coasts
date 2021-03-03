@@ -1,6 +1,6 @@
-function v = longshoreCurrent(profile,dzetady,wcross,wlong,c,theta,Dr,h_tot,st,ka,nu)
+function v = longshoreCurrent(profile,dzetady,wcross,wlong,c,theta,Dr,h_tot,st,ka,nu,type)
 
-% function v = longshoreCurrent(profile,dzetady,wcross,wlong,c,theta,Dr,h_tot,st,ka,nu);
+% function v = longshoreCurrent(profile,dzetady,wcross,wlong,c,theta,Dr,h_tot,st,ka,nu,type);
 %
 % This function computes the cross-shore distribution of the depth-averaged longshore current. Forcing
 % include waves, wind and alongshore pressure gradients (due to tides). The function is based on the depth-integrated 
@@ -20,6 +20,10 @@ function v = longshoreCurrent(profile,dzetady,wcross,wlong,c,theta,Dr,h_tot,st,k
 %	st is the total orbital velocity standard deviation
 %   ka is the apparent bed roughness
 %   nu is a large-scale mixing coefficient
+%   type --> 0 if running with tidal, wind and wave forcing 
+        %--> 1 if running without wind 
+        %--> 2 if running without tidal forcing 
+        %--> 3 if running without wind and without tidal forcing
 % OUTPUT
 %   v is the cross-shore distribution of the longshore current
 %
@@ -54,17 +58,27 @@ fc = 0.015*(ka./h_tot).^(1/3);                       % Manning-Strickler formula
 % --------------------------------------------------------------------
 %       Computation of the cross-shore vectors of forcing terms
 % --------------------------------------------------------------------
+
+
 % 1. tidal forcing (alongshore gradient dzetady)
-  Ftide = dzetady; 
+Ftide = -g*h_tot.*dzetady; 
 
 % 2. wind (tsy)                                    
-  Fwind = rhoa*Cd*wtot*wlong;  
+Fwind = 1/rho.*(rhoa*Cd.*wtot.*wlong);  
 
 % 3. waves
-% Fwaves = (1/8)*rho*g*Hrms*Hrms*(cg/c)*cos(theta)*sin(theta) + Er*cos(theta)*sin(theta); 
+Fwaves = -(1/rho)*-sin(theta)./c.*Dr;
 
+if type == 0 
 % compute total force F in m^2/s^2
 F = Ftide + Fwind + Fwaves;                         % F: right hand side of energy balance
+elseif type == 1 %Without wind forcing  
+F =  Ftide + Fwaves;   
+elseif type == 2 %Without tidal forcing  
+F = Fwind + Fwaves; 
+elseif type == 3 %Without wind forcing and without tidal forcing
+F = Fwaves; 
+end
 
 % --------------------------------------------------------------------
 %               Calculation of the alongshore velocity
