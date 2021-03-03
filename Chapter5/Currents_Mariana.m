@@ -70,6 +70,7 @@ currents(:,ii) = longshoreCurrent(profile,dzetady(ii),wcross(ii),wlong(ii),waves
 %Interpolation of the current profile to the position of the sensors 
 interpolated_v{ii} = interp1(waves.x,currents(:,ii),position_sensors);
 
+%Calculation of root mean square error for each tide 
 rmse(ii) = rootmeansquare_error(currents_data(:,ii),interpolated_v{ii});
 sprintf('The root mean square error for %s is %d', names{ii}, rmse(ii))
 
