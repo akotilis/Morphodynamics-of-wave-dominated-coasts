@@ -58,10 +58,10 @@ fc = 0.015*(ka./h_tot).^(1/3);                       % Manning-Strickler formula
 % Ftide = dzetady; 
 
 % 2. wind (tsy)                                    
-% Fwind = rhoa*Cd*wtot*wlong;  
+% Fwind = rhoa* 
 
 % 3. waves
-% Fwaves = (1/8)*rho*g*Hrms*Hrms*(cg/c)*cos(theta)*sin(theta) + Er*cos(theta)*sin(theta); 
+% Fwaves = (1/8)*rho*g 
 
 % compute total force F in m^2/s^2
 F = Ftide + Fwind + Fwaves;                         % F: right hand side of energy balance
