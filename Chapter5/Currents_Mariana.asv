@@ -52,22 +52,31 @@ wcross = [8.86 8.55 1.16]; %m/s
 
 dzetady = [-7.33e-6 -1.76e-5 8.57e-7]; 
 
+%We load the observations for the current for Egmond 
 currents_data = load('vEgmond.txt'); 
 
+%This are the position of the sensors for the current data 
 position_sensors = [4765 4790 4814 4835 4860 4889]; %meters 
 
+%We load the statistics from Chapter 1 
 load('StatisticsEgmond.mat'); 
 
 names = {'low tide', 'mid tide', 'high tide'}; 
 
+%We iterate for each one of the tides 
 for ii = 1:length(theta) 
      
 waves = BJmodelEmma(Hrms0(ii),T0(ii),Zeta(ii),theta(ii),profile,hmin);
 
 
-currents(:,ii) = longshoreCurrent(profile,dzetady(ii),wcross(ii),wlong(ii),waves.c,waves.theta,waves.Dr,waves.ht,waves.st,ka,nu,0)
+currents(:,ii) = longshoreCurrent(profile,dzetady(ii),wcross(ii),wlong(ii),waves.c,waves.theta,waves.Dr,waves.ht,waves.st,ka,nu,0);
 
-%interpolated_v(:,ii) = interp1(waves.x,currents(:,ii),position_sensors);
+%Interpolation of the current profile to the position of the sensors 
+interpolated_v{ii} = interp1(waves.x,currents(:,ii),position_sensors);
+
+%Calculation of root mean square error for each tide 
+rmse(ii) = rootmeansquare_error(currents_data(:,ii),interpolated_v{ii});
+sprintf('The root mean square error for %s is %d', names{ii}, rmse(ii))
 
 figure() 
 %Plot of modelled Hrms 
@@ -81,14 +90,15 @@ xlim([4000 max(waves.x)])
 %Plot of the cross-shore distribution of the longshore current
 subplot(3,1,2)
 plot(waves.x, currents(:,ii))
+hold on;
 title('Modelled mean alongshore current and measured values') 
 xlabel('x(m)') 
 ylabel('v(m/s)')
 xlim([4000 max(waves.x)])
 grid on 
-legend('Modelled along-shore current', 'Measured data'); 
-hold on;
 plot(position_sensors,currents_data(:,ii), '*') 
+legend('Modelled along-shore current', 'Measured data'); 
+%Plot of the bed profile 
 subplot(3,1,3) 
 plot(bed_profile(:,1),bed_profile(:,2))
 xlabel('x(m)') 
@@ -97,6 +107,8 @@ title('Bed level evolution')
 grid on 
      
 end
+
+
  
 %% Part 5.3: Complementary analysis 
 
@@ -147,7 +159,7 @@ plot(waves_normal.x,curr_normalwaves);
 grid on; 
 xlabel('x (m)'); 
 ylabel('v (m/s)'); 
-%legend('Theta = -36', 'Theta = 0'); 
+legend('Theta = -36', 'Theta = 0'); 
 
 
 
