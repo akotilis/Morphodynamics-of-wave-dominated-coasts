@@ -137,9 +137,10 @@ theta_normal = 0;
 waves_normal = BJmodelEmma(Hrms0(1),T0(1),Zeta(1),theta_normal,profile,hmin);
 
 
-curr_normalwaves = longshoreCurrent(profile,dzetady(1),wcross(1),wlong(1),waves_normal.c,waves_normal.theta,waves_normal.Dr,waves_normal.ht,waves_normal.st,ka,nu,0)
+curr_normalwaves = longshoreCurrent(profile,dzetady(1),wcross(1),wlong(1),waves_normal.c,waves_normal.theta,waves_normal.Dr,waves_normal.ht,waves_normal.st,ka,nu,0);
 
 figure()
+%Plot of long-shore current with wind forcing and without wind forcing 
 subplot(3,1,1)  
 plot(waves.x,currents(:,1)); 
 title('Comparison of long-shore current with wind forcing and without forcing for low tide');
@@ -149,6 +150,8 @@ plot(waves.x,curr(:,1));
 xlabel('x (m)'); 
 ylabel('v (m/s)'); 
 legend('With wind forcing', 'Without wind forcing'); 
+%Plot of comparison of long-shore current without wind, and without wind and tidal forcing
+%
 subplot(3,1,2)
 plot(waves.x,curr(:,1)); 
 title('Comparison of long-shore current without wind and tidal forcing and without tidal forcing for low tide'); 
@@ -159,6 +162,8 @@ xlabel('x (m)');
 ylabel('v (m/s)'); 
 legend('Without wind forcing', 'Without wind and without tidal forcing') 
 subplot(3,1,3) 
+%Plot of long-shore current with theta = -36 and waves normal to the sea
+%shore 
 plot(waves.x,currents(:,1)); 
 title('Comparison of long-shore current with theta = -36 and theta = 0 for low tide'); 
 hold on;

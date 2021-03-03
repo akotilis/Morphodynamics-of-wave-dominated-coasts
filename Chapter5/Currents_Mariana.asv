@@ -65,10 +65,12 @@ names = {'low tide', 'mid tide', 'high tide'};
 
 %We iterate for each one of the tides 
 for ii = 1:length(theta) 
-     
+
+%We calculate the wave properties over the profile for each tide 
 waves = BJmodelEmma(Hrms0(ii),T0(ii),Zeta(ii),theta(ii),profile,hmin);
 
 
+%We calculate the current for each one of the tides 
 currents(:,ii) = longshoreCurrent(profile,dzetady(ii),wcross(ii),wlong(ii),waves.c,waves.theta,waves.Dr,waves.ht,waves.st,ka,nu,0);
 
 %Interpolation of the current profile to the position of the sensors 
@@ -114,6 +116,11 @@ end
 
 %All analysis is for low tide only
 
+%We added an if statement in the function longshoreCurrent.m to run for 
+%the different cases that the question asks for, defining an input type,
+%and depending on the number is the forcings it takes into account for the
+%F calculation 
+
 for ii = 1:3 
     waves = BJmodelEmma(Hrms0(1),T0(1),Zeta(1),theta(1),profile,hmin);
     %curr(:,1) --> No wind forcing 
@@ -130,9 +137,10 @@ theta_normal = 0;
 waves_normal = BJmodelEmma(Hrms0(1),T0(1),Zeta(1),theta_normal,profile,hmin);
 
 
-curr_normalwaves = longshoreCurrent(profile,dzetady(1),wcross(1),wlong(1),waves_normal.c,waves_normal.theta,waves_normal.Dr,waves_normal.ht,waves_normal.st,ka,nu,0)
+curr_normalwaves = longshoreCurrent(profile,dzetady(1),wcross(1),wlong(1),waves_normal.c,waves_normal.theta,waves_normal.Dr,waves_normal.ht,waves_normal.st,ka,nu,0);
 
 figure()
+%Plot of 
 subplot(3,1,1)  
 plot(waves.x,currents(:,1)); 
 title('Comparison of long-shore current with wind forcing and without forcing for low tide');
