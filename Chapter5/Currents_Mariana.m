@@ -54,8 +54,10 @@ dzetady = [-7.33e-6 -1.76e-5 8.57e-7];
 
 %We load the observations for the current for Egmond 
 currents_data = load('vEgmond.txt'); 
+%'P1','P3','P4','P5','P6'
 position_pastsensors = [4478 4765 4790 4814 4835]; %meters 
 
+%'P3', 'P4', 'P5', 'P7' 'P8'
 %This are the position of the sensors for the current data 
 position_sensors = [4765 4790 4814 4835 4860 4889]; %meters 
 
@@ -63,6 +65,10 @@ position_sensors = [4765 4790 4814 4835 4860 4889]; %meters
 load('StatisticsEgmond.mat'); 
 
 names = {'low tide', 'mid tide', 'high tide'}; 
+
+c = {'r', 'g', 'b', 'm', 'c'}; 
+
+c2 = {'g', 'b', 'm', 'c', 'k', 'y'};
 
 %We iterate for each one of the tides 
 for ii = 1:length(theta) 
@@ -89,10 +95,9 @@ title(sprintf('Cross-shore evolution of Hrms for %s ',names{ii}));
 grid on 
 ylim([min(waves.Hrms) max(waves.Hrms)]); 
 hold on; 
-cmap = winter(length(position_sensors)); % Make colors 
 for jj= 1:length(position_pastsensors)
-scatter(position_pastsensors(jj), Hrms_total(jj,ii), 10, cmap(jj,2), 'filled')
-leg = {'Hrms BJModel', 'Hrms:P1','Hrms:P2','Hrms:P3','Hrms:P4','Hrms:P5'};  
+scatter(position_pastsensors(jj), Hrms_total(jj,ii), 10, c{jj}, 'filled')
+leg = {'Hrms BJModel', 'Hrms:P1','Hrms:P3','Hrms:P4','Hrms:P5','Hrms:P6'};  
 %We define the labels and the range for the x and y axis 
 end
 legend(leg)
@@ -109,9 +114,8 @@ ylabel('v(m/s)')
 xlim([4000 max(waves.x)])
 %ylim([min(currents(:,ii)) max(currents(:,ii))]); 
 grid on 
-cmap = turbo(length(position_sensors)); % Make colors 
 for xx= 1:length(position_sensors)
-scatter(position_sensors(xx), currents_data(xx,ii), 10, cmap(xx,3), 'filled')
+scatter(position_sensors(xx), currents_data(xx,ii), 10, c2{xx}, 'filled')
 lege = {'Modelled along-shore current', 'Hrms:P3','Hrms:P4','Hrms:P5','Hrms:P7','Hrms:P8'};  
 %We define the labels and the range for the x and y axis 
 end
