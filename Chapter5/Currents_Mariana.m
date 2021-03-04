@@ -54,6 +54,7 @@ dzetady = [-7.33e-6 -1.76e-5 8.57e-7];
 
 %We load the observations for the current for Egmond 
 currents_data = load('vEgmond.txt'); 
+position_pastsensors = [4478 4765 4790 4814 4835]; %meters 
 
 %This are the position of the sensors for the current data 
 position_sensors = [4765 4790 4814 4835 4860 4889]; %meters 
@@ -86,6 +87,15 @@ subplot(3,1,1)
 plot(waves.x, waves.Hrms);
 title(sprintf('Cross-shore evolution of Hrms for %s ',names{ii}));
 grid on 
+ylim([min(waves.Hrms) max(waves.Hrms)]); 
+hold on; 
+cmap = winter(length(position_sensors)); % Make colors 
+for jj= 1:length(position_pastsensors)
+scatter(position_pastsensors(jj), Hrms_total(jj,ii), 10, cmap(jj,2), 'filled')
+leg = {'Hrms BJModel', 'Hrms:P1','Hrms:P2','Hrms:P3','Hrms:P4','Hrms:P5'};  
+%We define the labels and the range for the x and y axis 
+end
+legend(leg)
 xlabel('x(m)') 
 ylabel('Hrms(m)')
 xlim([4000 max(waves.x)])
@@ -97,14 +107,22 @@ title('Modelled mean alongshore current and measured values')
 xlabel('x(m)') 
 ylabel('v(m/s)')
 xlim([4000 max(waves.x)])
+%ylim([min(currents(:,ii)) max(currents(:,ii))]); 
 grid on 
-plot(position_sensors,currents_data(:,ii), '*') 
-legend('Modelled along-shore current', 'Measured data'); 
+cmap = turbo(length(position_sensors)); % Make colors 
+for xx= 1:length(position_sensors)
+scatter(position_sensors(xx), currents_data(xx,ii), 10, cmap(xx,3), 'filled')
+lege = {'Modelled along-shore current', 'Hrms:P3','Hrms:P4','Hrms:P5','Hrms:P7','Hrms:P8'};  
+%We define the labels and the range for the x and y axis 
+end
+legend(lege)
 %Plot of the bed profile 
 subplot(3,1,3) 
 plot(bed_profile(:,1),bed_profile(:,2))
 xlabel('x(m)') 
 ylabel('z(m)') 
+xlim([0 max(bed_profile(:,1))]); 
+ylim([min(bed_profile(:,2)) max(bed_profile(:,2))]); 
 title('Bed level evolution') 
 grid on 
      
