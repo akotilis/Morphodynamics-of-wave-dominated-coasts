@@ -3,30 +3,11 @@
 
 %% 6.1.1 
 
-%low tide, mid tide and high tide 
-
-%Angle of wave incidence 
-theta = [-36 39 36]; %degrees 
-
-%Period 1/3 
-T0 = [7.58 6.69 5.54]; %seconds 
-
-%Significant wave height 
-H13 = [1.70 2.25 1.69]; %meters 
-
-%Calculated root mean square wave height (as calculated H1/3 =
-%sqrt(2)*Hrms)
-Hrms0 = H13./sqrt(2); %meters 
-
-%Water level (m NAP) 
-Zeta = [-0.45 0.09 0.91] %meters 
-
-
 array_names = ["lowTide.txt", "midTide.txt", "highTide.txt"];
 
 skewness = zeros(5,3); 
 assymetry = zeros(5,3); 
-Ur = zeros(5,3); 
+Ur = zeros(5,
 
 for jj = 1:length(wave_data(1,:))
     
@@ -35,13 +16,11 @@ for ii = 1:length(names_datasets)
     name = array_names(ii);
     wave_data = load(name);
     
-    %wavenumber = wavenumber_Guo(T0(ii), h) 
-    
     [skewness(jj,ii) assymetry(jj,ii)] = skewness_asymmetry(wave_data(:,jj));
     
-    %Ur(ii) = ursell_number(k,h,Hrms)
+    Ur(ii) = 
     
-    %save(sprintf('Skewness_%s', name)
+    save(sprintf('Skewness
     
 end  
    
@@ -74,6 +53,24 @@ grid on
 %% 6.2 Modelling Sk and As 
 
 %We first get the eta from the BJModel 
+
+%low tide, mid tide and high tide 
+
+%Angle of wave incidence 
+theta = [-36 39 36]; %degrees 
+
+%Period 1/3 
+T0 = [7.58 6.69 5.54]; %seconds 
+
+%Significant wave height 
+H13 = [1.70 2.25 1.69]; %meters 
+
+%Calculated root mean square wave height (as calculated H1/3 =
+%sqrt(2)*Hrms)
+Hrms0 = H13./sqrt(2); %meters 
+
+%Water level (m NAP) 
+Zeta = [-0.45 0.09 0.91] %meters 
 
 %Bed profile for Egmond data 
 bed_profile = load('prof1018.txt'); 
