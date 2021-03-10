@@ -26,8 +26,6 @@ Hrms0 = H13./sqrt(2); %meters
 Zeta = [-0.45 0.09 0.91] %meters 
 
 
-%We first get the eta from the BJModel 
-
 %Bed profile for Egmond data 
 bed_profile = load('prof1018.txt'); 
 
@@ -38,6 +36,9 @@ profile = [bed_profile(:,1) bed_profile(:,2)];
 % Model parameter 
 hmin = 0.2;     % Minimal water depth for computation
                 % (we stop the computation when h<hmin)
+                
+
+%We load the mean water 
                 
 h = load('MeanWaterDepth.txt'); 
 
@@ -122,23 +123,25 @@ ur_waves = ursell_number(waves.k, waves.eta, waves.Hrms);
 
 %Now we calculate As and Sk with the empirical relations 
 
-[sk_waves(ii) as_waves(ii)] = skewness_assymetryRuessink(ur_waves(ii))
+[sk_waves as_waves] = skewness_assymetryRuessink(ur_waves);
 
 
 figure() 
 subplot(3,1,1)
-semilogx(ur_waves, sk_waves(ii)); 
+plot(waves.x, sk_waves(ii)); 
 title(sprintf('Cross-shore evolution of the skewness predicted by the BJModel for %s', title_it{ii})); 
 hold on 
 semilogx(Ur_obs(:,ii),skewness(:,ii),'*') 
 legend('Skewness with Ruessink', 'Skewness observations')
+xlabel('Ursell number (log scale)')
+ylabel('Skewness') 
 grid on 
 
 subplot(3,1,2) 
 plot(ur_waves, as_waves(ii))
 title(sprintf('Cross-shore evolution of the assymetry predicted by the BJModel for %s', title_it{ii})); 
 hold on 
-plot(Ur_obs(:,ii),assymetry(:,ii)); 
+plot(Ur_obs(:,ii),assymetry(:,ii),'*'); 
 legend('Assymetry with Ruessink', 'Assymetry observations')
 grid on 
 xlabel('Ursell number (log scale)')
@@ -219,6 +222,37 @@ subplot(3,1,2)
 legend('r = 0', 'r = 0.3','r = 0.6'); 
 subplot(3,1,3) 
 legend(' \phi = - \pi /2 ', ' \phi = - \pi /4 ', ' \phi = 0 '); 
+
+
+
+%Now we plot for the low tide case 
+
+
+for xx = 1:length(h(:,1))
+    
+Uw(xx) = velocity_amplitude(h(xx,1),Hrms0(1),T0(1)) 
+
+end
+
+figure()
+plot(position_sensors,Uw, '*')
+grid on 
+title('Cross-shore evolution of the velocity amplitude for low tide')
+xlabel('z(m)')
+ylabel('Velocity amplitude (m)')
+
+
+%Now we calculate for different positions 
+
+
+
+x = [1000 4400 4500 4700 4920]; %positions (meters) 
+
+% It takes skewness, assymetry computation_r(S,A)
+
+% computation_phi(S,A)
+
+
 
 
 

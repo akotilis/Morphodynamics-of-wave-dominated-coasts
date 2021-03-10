@@ -26,8 +26,6 @@ Hrms0 = H13./sqrt(2); %meters
 Zeta = [-0.45 0.09 0.91] %meters 
 
 
-%We first get the eta from the BJModel 
-
 %Bed profile for Egmond data 
 bed_profile = load('prof1018.txt'); 
 
@@ -39,13 +37,19 @@ profile = [bed_profile(:,1) bed_profile(:,2)];
 hmin = 0.2;     % Minimal water depth for computation
                 % (we stop the computation when h<hmin)
                 
+
+%We load the mean water depth (it will be h) 
+                
 h = load('MeanWaterDepth.txt'); 
 
+
+%Position of the sensors 
 position_sensors = [4478 4765 4790 4814 4835]; %meters 
 
 
 array_names = ["lowTide.txt", "midTide.txt", "highTide.txt"];
 
+%We initialize the
 skewness = zeros(5,3); 
 assymetry = zeros(5,3); 
 Ur = zeros(5,3); 
