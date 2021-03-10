@@ -124,7 +124,7 @@ waves = BJmodelEmma(Hrms0(ii),T0(ii),Zeta(ii),theta(ii),profile,hmin);
 %We now calculate the ursell number 
 
 
-ur_waves = ursell_number(waves.k, waves.eta, waves.Hrms);
+ur_waves = ursell_number(waves.k, waves.ht, waves.Hrms);
 
 %Now we calculate As and Sk with the empirical relations 
 
@@ -133,34 +133,39 @@ ur_waves = ursell_number(waves.k, waves.eta, waves.Hrms);
 
 figure() 
 subplot(3,1,1)
-plot(waves.x, sk_waves(ii)); 
+plot(waves.x, sk_waves); 
 title(sprintf('Cross-shore evolution of the skewness predicted by the BJModel for %s', title_it{ii})); 
 hold on 
 for jj = 1:length(position_sensors)
-scatter(position_sensors(ii),skewness(jj,ii),10, c{jj}, 'filled')
-leg = {'Skewness with Ruessink', 'Sk:P1','Sk:P3','Sk:P4','Sk:P5','Sk:P6'};  
+scatter(position_sensors(jj),skewness(jj,ii),10, c{jj}, 'filled')
+leg = {'Sk:Ruessink', 'Sk:P1','Sk:P3','Sk:P4','Sk:P5','Sk:P6'};  
 end
 legend(leg)
-xlabel('Ursell number (log scale)')
+xlabel('x(m)') 
 ylabel('Skewness') 
 grid on 
+xlim([4000 max(waves.x)]); 
 
 
 subplot(3,1,2) 
-plot(waves.x, as_waves(ii))
+plot(waves.x, as_waves)
 title(sprintf('Cross-shore evolution of the assymetry predicted by the BJModel for %s', title_it{ii})); 
 hold on 
-plot(position_sensors,assymetry(:,ii),'*'); 
-legend('Assymetry with Ruessink', 'Assymetry observations')
+for jj = 1:length(position_sensors)
+scatter(position_sensors(jj),assymetry(jj,ii),10, c{jj}, 'filled')
+leg = {'As:Ruessink', 'As:P1','As:P3','As:P4','As:P5','As:P6'};  
+end
+legend(leg)
 grid on 
-xlabel('Ursell number (log scale)')
+xlabel('x(m)') 
+xlim([4000 max(waves.x)]); 
 ylabel('Assymetry') 
 
 subplot(3,1,3)
 plot(bed_profile(:,1),bed_profile(:,2))
 xlabel('x(m)') 
 ylabel('z(m)') 
-xlim([0 max(bed_profile(:,1))]); 
+xlim([4000 max(bed_profile(:,1))]); 
 ylim([min(bed_profile(:,2)) max(bed_profile(:,2))]); 
 title('Bed level evolution') 
 grid on 
@@ -243,6 +248,11 @@ Uw_lowtide(xx) = velocity_amplitude(h(xx,1),Hrms0(1),T0(1));
 end
 
 figure()
+for jj = 1:length(position_sensors)
+scatter(position_sensors(jj),Uw_lowtide(jj),10, c{jj}, 'filled')
+leg = {'As:Ruessink', 'As:P1','As:P3','As:P4','As:P5','As:P6'};  
+end
+legend(leg)
 plot(position_sensors,Uw_lowtide, '*')
 grid on 
 title('Cross-shore evolution of the velocity amplitude for low tide')

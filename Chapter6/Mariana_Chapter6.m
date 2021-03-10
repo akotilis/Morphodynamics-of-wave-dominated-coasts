@@ -49,6 +49,8 @@ position_sensors = [4478 4765 4790 4814 4835]; %meters
 
 array_names = ["lowTide.txt", "midTide.txt", "highTide.txt"];
 
+load('StatisticsEgmond.mat');
+
 %We initialize the
 skewness = zeros(5,3); 
 assymetry = zeros(5,3); 
@@ -65,7 +67,7 @@ for ii = 1:length(array_names)
     
     [skewness(jj,ii) assymetry(jj,ii)] = skewness_asymmetry(wave_data(:,jj));
     
-    Ur_obs(jj,ii) = ursell_number(wavenumber,h(jj,ii),Hrms0(ii)); 
+    Ur_obs(jj,ii) = ursell_number(wavenumber,h(jj,ii),Hrms_total(jj,ii)); 
     
      
 end  
@@ -248,10 +250,16 @@ Uw_lowtide(xx) = velocity_amplitude(h(xx,1),Hrms0(1),T0(1));
 end
 
 figure()
-plot(position_sensors,Uw_lowtide, '*')
+hold on
+for jj = 1:length(position_sensors)
+scatter(position_sensors(jj),Uw_lowtide(jj),10, c{jj}, 'filled')
+leg = {'Uw:P1','Uw:P3','Uw:P4','Uw:P5','Uw:P6'};  
+end
+legend(leg)
 grid on 
 title('Cross-shore evolution of the velocity amplitude for low tide')
 xlabel('z(m)')
+ylim([0.7 2]); 
 ylabel('Velocity amplitude (m)')
 %Add the sensor colors 
 
@@ -263,7 +271,11 @@ ylabel('Velocity amplitude (m)')
 
 x = [1000 4400 4500 4700 4920]; %positions (meters) 
 
-%Computation of r and phi for the low tide and the new positions 
+%Computation of r and phi for the low tide and the new positions
+
+%First we interpolate the h into the new positions 
+
+%interpolation_data = interp1(position_vectors,h(:,1),x);
 
 r_lowtide = 
 

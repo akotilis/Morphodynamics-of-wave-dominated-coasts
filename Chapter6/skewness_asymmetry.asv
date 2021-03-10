@@ -12,15 +12,15 @@ function [sk as] = skewness_asymmetry(eta);
 
 for ii = 1 :length(eta(1,:))
     
-%numerator = mean(eta(:,ii).^3); 
-%denominator = mean(eta(:,ii).^2).^(3/2); 
+numerator = mean(eta(:,ii).^3); 
+denominator = mean(eta(:,ii).^2).^(3/2); 
 
-skewness(ii) = (mean(eta(:,ii).^3))./((mean(eta(:,ii).^2)).^(3/2));
-%skewness(ii) = numerator/denominator; 
+skewness(ii) = (mean(eta.^3))./((mean(eta.^2)).^(3/2));
+skewness(ii) = numerator/denominator; 
 
 %num_assymetry = mean(imag(hilbert(eta(:,ii)).^3); 
 
-assymetry(ii) = mean(imag(hilbert(eta(:,ii))).^3)/(mean(eta(:,ii).^2)).^(3/2);
+assymetry(ii) = mean(imag(hilbert(eta)).^3)/(mean(eta.^2)).^(3/2);
 
 %assymetry(ii) = num_assymetry/denominator; 
 
@@ -31,9 +31,9 @@ end
 
 
 
-%low_tide = load('lowTide.txt')
+low_tide = load('lowTide.txt')
 
-%eta = low_tide; 
+eta = low_tide; 
 
 
 

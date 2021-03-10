@@ -9,8 +9,8 @@ function [sk as] = skewness_assymetryRuessink(ursell_number)
 inside_exp = (-0.471 - log10(ursell_number))./0.297; 
 
 B = 0.857./(1 + exp(inside_exp)); 
-
-Psi = -90 +90.*tanh(0.815./(ursell_number.^0.672)); 
+    
+Psi = (-90 +90.*tanh(0.815./(ursell_number.^0.672)))*pi/180; %radians
 
 %assymetry 
 
