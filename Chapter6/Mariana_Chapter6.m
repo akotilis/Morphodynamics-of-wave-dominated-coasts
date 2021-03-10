@@ -54,7 +54,7 @@ skewness = zeros(5,3);
 assymetry = zeros(5,3); 
 Ur = zeros(5,3); 
 
-for jj = 1:length(wave_data(1,:))
+for jj = 1:length(position_sensors)
     
 for ii = 1:length(array_names) 
     
@@ -84,7 +84,7 @@ Ur = [0.01:0.01:100];
 
 [skewness_R assymetry_R] = skewness_assymetryRuessink(Ur); 
 
-figure()
+figure(1)
 subplot(2,1,1) 
 semilogx(Ur,skewness_R) 
 hold on;
@@ -113,6 +113,8 @@ grid on
 
 title_it = {'low tide', 'mid tide', 'high tide'}; 
 
+c = {'r', 'g', 'b', 'm', 'c'}; 
+
 
 for ii = 1: length(theta) 
 %We get eta from the BJModel 
@@ -122,7 +124,7 @@ waves = BJmodelEmma(Hrms0(ii),T0(ii),Zeta(ii),theta(ii),profile,hmin);
 %We now calculate the ursell number 
 
 
-ur_waves = ursell_number(waves.k, waves.eta, waves.Hrms);
+ur_waves = ursell_number(waves.k, waves.ht, waves.Hrms);
 
 %Now we calculate As and Sk with the empirical relations 
 
@@ -131,30 +133,39 @@ ur_waves = ursell_number(waves.k, waves.eta, waves.Hrms);
 
 figure() 
 subplot(3,1,1)
-plot(waves.x, sk_waves(ii)); 
+plot(waves.x, sk_waves); 
 title(sprintf('Cross-shore evolution of the skewness predicted by the BJModel for %s', title_it{ii})); 
 hold on 
-semilogx(Ur_obs(:,ii),skewness(:,ii),'*') 
-legend('Skewness with Ruessink', 'Skewness observations')
-xlabel('Ursell number (log scale)')
+for jj = 1:length(position_sensors)
+scatter(position_sensors(jj),skewness(jj,ii),10, c{jj}, 'filled')
+leg = {'Sk:Ruessink', 'Sk:P1','Sk:P3','Sk:P4','Sk:P5','Sk:P6'};  
+end
+legend(leg)
+xlabel('x(m)') 
 ylabel('Skewness') 
 grid on 
+xlim([4000 max(waves.x)]); 
+
 
 subplot(3,1,2) 
-plot(ur_waves, as_waves(ii))
+plot(waves.x, as_waves)
 title(sprintf('Cross-shore evolution of the assymetry predicted by the BJModel for %s', title_it{ii})); 
 hold on 
-plot(Ur_obs(:,ii),assymetry(:,ii),'*'); 
-legend('Assymetry with Ruessink', 'Assymetry observations')
+for jj = 1:length(position_sensors)
+scatter(position_sensors(jj),assymetry(jj,ii),10, c{jj}, 'filled')
+leg = {'As:Ruessink', 'As:P1','As:P3','As:P4','As:P5','As:P6'};  
+end
+legend(leg)
 grid on 
-xlabel('Ursell number (log scale)')
+xlabel('x(m)') 
+xlim([4000 max(waves.x)]); 
 ylabel('Assymetry') 
 
 subplot(3,1,3)
 plot(bed_profile(:,1),bed_profile(:,2))
 xlabel('x(m)') 
 ylabel('z(m)') 
-xlim([0 max(bed_profile(:,1))]); 
+xlim([4000 max(bed_profile(:,1))]); 
 ylim([min(bed_profile(:,2)) max(bed_profile(:,2))]); 
 title('Bed level evolution') 
 grid on 
@@ -181,7 +192,7 @@ for jj = 1:length(phi)
     
 [u{jj} t{jj}] = waveshape(r(jj),phi(1),Uw,T); 
 
-figure(1)
+figure(5)
 subplot(3,1,1) 
 hold on;
 plot(t{jj},u{jj})
@@ -218,7 +229,7 @@ grid on;
 end
 
 %Plots 
-figure(1)
+figure(5)
 subplot(3,1,1)
 legend('r = 0', 'r = 0.3','r = 0.6'); 
 subplot(3,1,2)
@@ -230,19 +241,20 @@ legend(' \phi = - \pi /2 ', ' \phi = - \pi /4 ', ' \phi = 0 ');
 
 %Now we plot for the low tide case 
 
-
 for xx = 1:length(h(:,1))
     
-Uw(xx) = velocity_amplitude(h(xx,1),Hrms0(1),T0(1)) 
+Uw_lowtide(xx) = velocity_amplitude(h(xx,1),Hrms0(1),T0(1));
 
 end
 
 figure()
-plot(position_sensors,Uw, '*')
+plot(position_sensors,Uw_lowtide, '*')
 grid on 
 title('Cross-shore evolution of the velocity amplitude for low tide')
 xlabel('z(m)')
 ylabel('Velocity amplitude (m)')
+%Add the sensor colors 
+
 
 
 %Now we calculate for different positions 
@@ -250,6 +262,10 @@ ylabel('Velocity amplitude (m)')
 
 
 x = [1000 4400 4500 4700 4920]; %positions (meters) 
+
+%Computation of r and phi for the low tide and the new positions 
+
+r_lowtide = 
 
 % It takes skewness, assymetry computation_r(S,A)
 
