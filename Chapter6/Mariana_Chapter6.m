@@ -243,19 +243,15 @@ legend(' \phi = - \pi /2 ', ' \phi = - \pi /4 ', ' \phi = 0 ');
 
 %Now we plot for the low tide case 
 
-for xx = 1:length(h(:,1))
     
-Uw_lowtide(xx) = velocity_amplitude(h(xx,1),Hrms0(1),T0(1));
+waves = BJmodelEmma(Hrms0(1),T0(1),Zeta(1),theta(1),profile,hmin);
 
-end
+    
+Uw_lowtide = velocity_amplitude(waves.ht,waves.Hrms,T0(1));
 
 figure()
+plot(waves.x, Uw_lowtide)
 hold on
-for jj = 1:length(position_sensors)
-scatter(position_sensors(jj),Uw_lowtide(jj),10, c{jj}, 'filled')
-leg = {'Uw:P1','Uw:P3','Uw:P4','Uw:P5','Uw:P6'};  
-end
-legend(leg)
 grid on 
 title('Cross-shore evolution of the velocity amplitude for low tide')
 xlabel('z(m)')
@@ -275,13 +271,45 @@ x = [1000 4400 4500 4700 4920]; %positions (meters)
 
 %First we interpolate the h into the new positions 
 
-%interpolation_data = interp1(position_vectors,h(:,1),x);
+interpolation_ht = interp1(waves.x,waves.ht,x);
+interpolation_eta = interp1(waves.x,waves.eta,x);
+interpolation_Hrms = interp1(waves.x,waves.Hrms,x); 
+%We calculate the assymetry and skewness as in section 6.1.1 
 
-r_lowtide = 
+[skewness_lowtide assymetry_lowtide] = skewness_asymmetry(interpolation_eta);
 
-% It takes skewness, assymetry computation_r(S,A)
+for xx = 1:length(skewness_lowtide) 
+r_lowtide(xx) = computation_r(skewness_lowtide(xx),assymetry_lowtide(xx)); 
 
-% computation_phi(S,A)
+phi_lowtide(xx) = computation_phi(skewness_lowtide(xx),assymetry_lowtide(xx)); 
+
+Uw_newpositions(xx) = velocity_amplitude(interpolation_ht(xx),interpolation_Hrms(xx),T0(1));
+
+[u_new(:,xx) t_new(:,xx)] = waveshape(r_lowtide(xx),phi_lowtide(xx),Uw_newpositions(xx),T0(1)); 
+
+figure(10)
+subplot(5,1,xx)
+plot(t_new(:,xx),u_new(:,xx))
+xlabel('t(s)') 
+ylabel(' u(t) (m/s)')
+title(sprintf('Orbital velocity for position x = %d m',x(xx)))
+
+figure(11) 
+hold on; 
+plot(t_new(:,xx),u_new(:,xx))
+xlabel('t(s)') 
+ylabel(' u(t) (m/s)')
+%title(sprintf('Orbital velocity for position x = %d m',x(xx)))
+
+
+
+
+end
+
+
+
+
+
 
 
 

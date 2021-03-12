@@ -49,6 +49,8 @@ position_sensors = [4478 4765 4790 4814 4835]; %meters
 
 array_names = ["lowTide.txt", "midTide.txt", "highTide.txt"];
 
+load('StatisticsEgmond.mat');
+
 %We initialize the
 skewness = zeros(5,3); 
 assymetry = zeros(5,3); 
@@ -65,7 +67,7 @@ for ii = 1:length(array_names)
     
     [skewness(jj,ii) assymetry(jj,ii)] = skewness_asymmetry(wave_data(:,jj));
     
-    Ur_obs(jj,ii) = ursell_number(wavenumber,h(jj,ii),Hrms0(ii)); 
+    Ur_obs(jj,ii) = ursell_number(wavenumber,h(jj,ii),Hrms_total(jj,ii)); 
     
      
 end  
@@ -241,22 +243,19 @@ legend(' \phi = - \pi /2 ', ' \phi = - \pi /4 ', ' \phi = 0 ');
 
 %Now we plot for the low tide case 
 
-for xx = 1:length(h(:,1))
     
-Uw_lowtide(xx) = velocity_amplitude(h(xx,1),Hrms0(1),T0(1));
+waves = BJmodelEmma(Hrms0(1),T0(1),Zeta(1),theta(1),profile,hmin);
 
-end
+    
+Uw_lowtide = velocity_amplitude(waves.ht,waves.Hrms,T0(1));
 
 figure()
-for jj = 1:length(position_sensors)
-scatter(position_sensors(jj),Uw_lowtide(jj),10, c{jj}, 'filled')
-leg = {'As:Ruessink', 'As:P1','As:P3','As:P4','As:P5','As:P6'};  
-end
-legend(leg)
-plot(position_sensors,Uw_lowtide, '*')
+plot(waves.x, Uw_lowtide)
+hold on
 grid on 
 title('Cross-shore evolution of the velocity amplitude for low tide')
 xlabel('z(m)')
+ylim([0.7 2]); 
 ylabel('Velocity amplitude (m)')
 %Add the sensor colors 
 
@@ -268,13 +267,39 @@ ylabel('Velocity amplitude (m)')
 
 x = [1000 4400 4500 4700 4920]; %positions (meters) 
 
-%Computation of r and phi for the low tide and the new positions 
+%Computation of r and phi for the low tide and the new positions
 
-r_lowtide = 
+%First we interpolate the h into the new positions 
 
-% It takes skewness, assymetry computation_r(S,A)
+interpolation_ht = interp1(waves.x,waves.ht,x);
+interpolation_eta = interp1(waves.x,waves.eta,x);
+interpolation_Hrms = interp1(waves.x,waves.Hrms,x); 
+%We calculate the assymetry and skewness as in section 6.1.1 
 
-% computation_phi(S,A)
+[skewness_lowtide assymetry_lowtide] = skewness_asymmetry(interpolation_eta);
+
+for xx = 1:length(skewness_lowtide) 
+r_lowtide(xx) = computation_r(skewness_lowtide(xx),assymetry_lowtide(xx)); 
+
+phi_lowtide(xx) = computation_phi(skewness_lowtide(xx),assymetry_lowtide(xx)); 
+
+Uw_newpositions(xx) = velocity_amplitude(interpolation_ht(xx),interpolation_Hrms(xx),T0(1));
+
+[u_new(:,xx) t_new(:,xx)] = waveshape(r_lowtide(xx),phi_lowtide(xx),Uw_newpositions(xx),T0(1)); 
+
+figure(10)
+hold on; 
+plot(t_new(:,xx),u_new(:,
+
+end
+
+figure() 
+hold on 
+plot(t_new(:,,u_new)
+
+
+
+
 
 
 
