@@ -257,33 +257,67 @@ title('Cross-shore evolution of the velocity amplitude for low tide')
 xlabel('z(m)')
 ylim([0.7 2]); 
 ylabel('Velocity amplitude (m)')
-%Add the sensor colors 
 
 
 
 %Now we calculate for different positions 
 
+for i=1:length(x_new)               %Loop over different locations
+
+
+
+    index = find(x==x_new(i));                                          %Finding index of different locations
+
+
+
+    Uw_loop = Uw(index);                                                %Define Uw at location
+
+
+
+    r = computation_r(Sk_l(index), As_l(index));                        %Define r at location
+
+
+
+    phi = computation_phi(Sk_l(index), As_l(index));                    %Define phi at location
+
+
+
+    [u_egmond(:,i), t_egmond(:,i)] = waveshape(r,phi ,Uw_loop,T);       %Computation of wave shape (m/s) time series (s)
+
+
+
+end
+
 
 
 x = [1000 4400 4500 4700 4920]; %positions (meters) 
 
+
+[pos, ~] = find(waves.x == x); % find indices of x-positions
+
+%Now we calculate As and Sk with the empirical relations 
+
+ur_waves_lowtide = ursell_number(waves.k, waves.ht, waves.Hrms);
+
+[sk_lowtide as_lowtide] = skewness_assymetryRuessink(ur_waves_lowtide);
+
+
+
 %Computation of r and phi for the low tide and the new positions
 
-%First we interpolate the h into the new positions 
 
-interpolation_ht = interp1(waves.x,waves.ht,x);
-interpolation_eta = interp1(waves.x,waves.eta,x);
-interpolation_Hrms = interp1(waves.x,waves.Hrms,x); 
 %We calculate the assymetry and skewness as in section 6.1.1 
 
-[skewness_lowtide assymetry_lowtide] = skewness_asymmetry(interpolation_eta);
+%[skewness_lowtide assymetry_lowtide] = skewness_asymmetry(interpolation_eta);
 
-for xx = 1:length(skewness_lowtide) 
-r_lowtide(xx) = computation_r(skewness_lowtide(xx),assymetry_lowtide(xx)); 
+for xx = 1:length(pos) 
+r_lowtide(xx) = computation_r(sk_lowtide(pos(xx,1)),as_lowtide(pos(xx,1))); 
 
-phi_lowtide(xx) = computation_phi(skewness_lowtide(xx),assymetry_lowtide(xx)); 
+phi_lowtide(xx) = computation_phi(sk_lowtide(pos(xx,1)),as_lowtide(pos(xx,1))); 
 
-Uw_newpositions(xx) = velocity_amplitude(interpolation_ht(xx),interpolation_Hrms(xx),T0(1));
+%Uw_newpositions(xx) = velocity_amplitude(waves.ht(pos(xx)),interpolation_Hrms(xx),T0(1));
+
+Uw_newpositions(xx) = Uw_lowtide(pos(xx,1)); 
 
 [u_new(:,xx) t_new(:,xx)] = waveshape(r_lowtide(xx),phi_lowtide(xx),Uw_newpositions(xx),T0(1)); 
 
@@ -293,18 +327,27 @@ plot(t_new(:,xx),u_new(:,xx))
 xlabel('t(s)') 
 ylabel(' u(t) (m/s)')
 title(sprintf('Orbital velocity for position x = %d m',x(xx)))
+grid on 
+ylim([-1.5 1.5]) 
 
-figure(11) 
-hold on; 
-plot(t_new(:,xx),u_new(:,xx))
-xlabel('t(s)') 
-ylabel(' u(t) (m/s)')
-%title(sprintf('Orbital velocity for position x = %d m',x(xx)))
+%figure(11) 
+%hold on; 
+%plot(t_new(:,xx),u_new(:,xx))
+%xlabel('t(s)') 
+%ylabel(' u(t) (m/s)')
+%title('Time series of the orbital velocity for the new positions')
+%grid on 
+
+
 
 
 
 
 end
+
+
+figure(11)
+legend('x = 1000','x = 4400','x = 4500','x = 4700','x = 4920')
 
 
 
