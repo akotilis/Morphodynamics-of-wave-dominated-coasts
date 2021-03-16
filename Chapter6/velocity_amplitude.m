@@ -13,7 +13,7 @@ function Uw = velocity_amplitude(h,Hrms,T)
 
 k = wavenumber_Guo(T,h); 
 
-first = pi./T; 
+first = pi/T; 
 second = Hrms./sinh(k.*h); 
 
 Uw = first*second; 

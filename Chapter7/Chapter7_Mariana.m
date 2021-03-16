@@ -53,6 +53,8 @@ H_relative(ii) = Hmo_swell(ii)./eval(sprintf('condition%d.data(:,1)', ii);
 ratio = Hmo_inf(ii)/Hmo_swell(ii); 
 
 %Removing the low frequency variations 
+%filtered_data = fft_filter(eval(sprintf('condition%d.data(:,1)', ii), Fs, 0, fhigh)
+
 
 
 
@@ -71,6 +73,46 @@ ylabel('Variance spectral density [m^2/Hz]')
 legend('Spectrum', 'Lower confidence interval', 'Upper confidence interval');
 
 end
+
+
+%% 7.2 
+
+
+for ii = 1:3 
+    
+%Mean component of velocity u 
+    
+mean_u(ii) = mean(eval(sprintf('condition%d.data(:,2)', ii)));
+
+%
+
+
+
+    
+    
+    
+end
+
+
+
+
+%% 7.2 Sediment transport 
+
+
+% 7.2.1 Preliminary analysis 
+
+figure() 
+subplot(1,2,1) 
+
+
+
+
+%Sediment transport calculations 
+
+
+
+
+
 
 
 

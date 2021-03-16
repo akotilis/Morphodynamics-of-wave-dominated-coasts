@@ -4,6 +4,14 @@ function [sk as] = skewness_assymetryRuessink(ursell_number)
 %assymetry from the Ruessink empirical fits defined in Equations 6.5 and
 %6.6 of the manual. 
 
+
+%INPUT 
+%ursell number 
+
+%OUTPUT 
+%skewness 
+%assymetry 
+
 %Non linearity parameters 
 
 inside_exp = (-0.471 - log10(ursell_number))./0.297; 
