@@ -33,8 +33,10 @@ else
    f = [0: Nt/2];
    f = [f,-Nt/2+f(2:(Nt/2))];
 end;
-
 f = f(:)*df;
+
+figure()
+plot(f, abs(Y/))
 
 % look for the frequency which should be removed 
 t = ((abs(f)< flow) | (abs(f) > fhigh));
