@@ -58,13 +58,20 @@ disp(sprintf('The infragravity wave height for condition %d is %d', ii, Hmo_inf(
 
 H_relative(ii) = Hmo_swell(ii)./eval(sprintf('condition%d.h', ii)); 
 
+disp(sprintf('The relative wave height for condition %d is %d', ii, H_relative(ii)))
+
+
 %Ratio infragravity over swell 
 
 ratio(ii) = Hmo_inf(ii)/Hmo_swell(ii); 
 
+disp(sprintf('The ratio between the infragavity wave height and sea swell wave height for condition %d is %d', ii, ratio(ii)))
+
+
 %Removing the low frequency variations 
 Fn = Fs/2; %Nyquist frequency
-%filtered_data = fft_filter(condition, Fs, Fn/2, Fn); 
+Flow = 0.05; %Hz 
+%filtered_data = fft_filter(condition, Fl, Fn/2, Fn); 
 
 
 %Skewness and assymetry 
@@ -91,6 +98,8 @@ subplot(3,1,ii)
 %plot(skewness)
 hold on 
 %plot(assymetry) 
+title(sprintf('Skewness and assymetry for sea swell waves for condition %d',ii))
+%legend('Skewness', 'Assymetry') 
 
 
 
@@ -202,22 +211,38 @@ total_sd(ii) = mean(u.*c);
 %First term 
 uc(ii) = mean(u)*mean(c); 
 
+
+%low frequency velocity 
+%u_hf = fft_filter(u,Fs, 0, ); 
+
+%high frequency velocity  
+%u_lf = fft_filter(u,Fs,) 
+
+%low frequency concentration 
+%c_hf = fft_filter(c,Fs, 0, ); 
+
+%high frequency concentration  
+%c_lf = fft_filter(c,Fs,) 
+
 %Second term
 
-%uhf_chf = ; 
+%uhf_chf(ii) = mean(u_hf*c_hf); 
 
 %Third term 
+%ulf_clf = mean(u_lf*c_lf); 
 
 %Adding the three terms 
-all_terms = uc; 
+all_terms(ii) = uc(ii) + uhf_chf(ii) + ulf_clf(ii); 
 
-figure(1) 
-subplot(3,1,ii) 
+%Check that uc≈uc+ uhfchf + ulfclf.
+
+figure()
+subplot(3,1,ii)
+plot(uc(ii))
 hold on 
-%plot()
-title(sprintf('Total sediment transport for condition %d',ii)) 
-plot(all_terms)
-grid on 
+plot(all_terms(ii))
+title(sprintf('Comparison ot total sediment transport and uc+ uhfchf + ulfclf for condition %d', ii)) 
+legend('Total sediment transport','uc+ uhfchf + ulfclf')  
 
 
 end

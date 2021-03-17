@@ -58,13 +58,20 @@ disp(sprintf('The infragravity wave height for condition %d is %d', ii, Hmo_inf(
 
 H_relative(ii) = Hmo_swell(ii)./eval(sprintf('condition%d.h', ii)); 
 
+disp(sprintf('The relative wave height for condition %d is %d', ii, H_relative(ii)))
+
+
 %Ratio infragravity over swell 
 
 ratio(ii) = Hmo_inf(ii)/Hmo_swell(ii); 
 
+disp(sprintf('The ratio between the infragavity wave height and sea swell wave height for condition %d is %d', ii, ratio(ii)))
+
+
 %Removing the low frequency variations 
 Fn = Fs/2; %Nyquist frequency
-%filtered_data = fft_filter(condition, Fs, Fn/2, Fn); 
+Flow = 0.05; %Hz 
+filtered_data = fft_filter(condition, Fs, Flow, Fn); 
 
 
 %Skewness and assymetry 
@@ -91,6 +98,8 @@ subplot(3,1,ii)
 %plot(skewness)
 hold on 
 %plot(assymetry) 
+title(sprintf('Skewness and assymetry for sea swell waves for condition %d',ii))
+%legend('Skewness', 'Assymetry') 
 
 
 
