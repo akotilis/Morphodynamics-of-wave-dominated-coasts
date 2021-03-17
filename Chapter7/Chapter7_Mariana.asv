@@ -13,35 +13,54 @@ clear all;
 load('ucData.mat')
 
 
+%We do a first overview of the detrended sea surface elevation for the 3
+%sets of data 
+for ii = 1:3 
+figure(50)
+subplot(3,1,ii)
+%Plot free surface elevation 
+plot(eval(sprintf('condition%d.data(:,1)', ii)))
+grid on 
+xlabel('Time (s)')
+ylabel('z (m)')
+ylim([-2.2 2.2]) 
+xlim([0 4096])
+title(sprintf('Detrended sea surface elevation for condition %d',ii)) 
+
+end
+
+
+%Defining length of the data 
 nfft = length(condition1.data(:,1));
 
+%We define 12 blocks to have 30 degrees of freedom 
 array_blocks = round(2*nfft/(12+1));
 
-Fs = condition1.Fs; 
+%We define Fs (is 2 for all data sets) 
+Fs = condition1.Fs; %Hz
 
 n = 3; %Number of conditions 
 
-H_relative = zeros(nfft,3); 
-
+%We run for all conditions (all data sets) for the first dimension (i.e.
+%the detrended sea surface elevation 
 for ii = 1:n
-    
+ 
+%We read the sea surface elevation data     
 condition = eval(sprintf('condition%d.data(:,1)', ii)); 
     
-
+%We calculate the variance spectrum 
 [spectrum frequency edff confidenceint] = VarianceDensitySpectrum(condition,array_blocks,Fs);
 
-max_spectrum = max(spectrum);
-
+%We save the spectrum 
 spectrum_all{ii} = spectrum; 
-
-confidence_intervals1{ii} = confidenceint(1)*spectrum; 
-confidence_intervals2{ii} = confidenceint(2)*spectrum; 
 
 %Sea swell wave height 
 p= 0 ; %zero order m0 
 f_1 = 0.05; %Hz 
 f_2 = Fs/2; %Nyquist frequency (sampling frequency/2) 
+%We calculate the spectral moment 
 moment_swell = spectral_moment(frequency,spectrum,f_1,f_2,p)
+%Calculation of sea swell wave height 
 Hmo_swell(ii) = 4*sqrt(moment_swell);
 
 disp(sprintf('The sea swell wave height for condition %d is %d', ii, Hmo_swell(ii)))
@@ -49,14 +68,16 @@ disp(sprintf('The sea swell wave height for condition %d is %d', ii, Hmo_swell(i
 %Infragravity wave height 
 f_1 = 0.005; %Hz 
 f_2 = 0.05; %Hz 
+%We calculate the spectral moment 
 moment_infra = spectral_moment(frequency,spectrum,f_1,f_2,p)
+%Calculation of infragravity wave height 
 Hmo_inf(ii) = 4*sqrt(moment_infra);
 
 disp(sprintf('The infragravity wave height for condition %d is %d', ii, Hmo_inf(ii)))
 
 %Calculation of relative wave height 
 
-H_relative(ii) = Hmo_swell(ii)./eval(sprintf('condition%d.h', ii)); 
+H_relative(ii) = Hmo_swell(ii)/eval(sprintf('condition%d.h', ii)); 
 
 disp(sprintf('The relative wave height for condition %d is %d', ii, H_relative(ii)))
 
@@ -71,38 +92,24 @@ disp(sprintf('The ratio between the infragavity wave height and sea swell wave h
 %Removing the low frequency variations 
 Fn = Fs/2; %Nyquist frequency
 Flow = 0.05; %Hz 
-%filtered_data = fft_filter(condition, Fl, Fn/2, Fn); 
+%We filter the data for the low frequencies 
+filtered_data = fft_filter(condition, Fs, Flow, Fn); 
 
 
-%Skewness and assymetry 
+%Skewness and assymetry calculation with the filtered data  
 
-%[skewness assymetry] = skewness_asymmetry(filtered_data);
+[skewness(ii) assymetry(ii)] = skewness_asymmetry(filtered_data);
 
 
 %Variance spectral density for all conditions 
 figure(1)
 subplot(3,1,ii)
-plot(spectrum_all{1,ii})
+plot(frequency,spectrum_all{1,ii})
 title(sprintf('Variance density spectrum for condition %d ',ii))
-hold on 
-plot(confidence_intervals1{1,ii})
-plot(confidence_intervals2{1,ii})
 grid on 
 xlabel('Frequency [Hz]'); 
-ylabel('Variance spectral density [m^2/Hz]')
-legend('Spectrum', 'Lower confidence interval', 'Upper confidence interval');
-
-%Skewness and assymetry for each condition 
-figure(2)
-subplot(3,1,ii) 
-%plot(skewness)
-hold on 
-%plot(assymetry) 
-title(sprintf('Skewness and assymetry for sea swell waves for condition %d',ii))
-%legend('Skewness', 'Assymetry') 
-
-
-
+ylabel('Var. spec. density [m^2/Hz]')
+xlim([0 1]) 
 end
 
 %% 7.1.2 Separation of time series 
@@ -110,40 +117,56 @@ end
 %Compute the mean component of the velocity, u , for the three conditions. 
 %Is it consistent with the conclusions drawn in Section 7.1.1?
 
+%Running for all data sets (all conditions) 
 for ii = 1:n 
     
+    %We read the velocity from the data set 
     u = eval(sprintf('condition%d.data(:,2)', ii)); 
     
+    %We calculate the mean of the velocity 
     umean(ii) = mean(u); %cross-shore near bed velocity (m/s)
     
     disp(sprintf('The value of u mean is %0.2d for condition %d', umean(ii),ii)) 
     
-    %Compute now the high and low frequency components for each condition using filter fft
+    %Compute now the high and low frequency components for each condition 
+    %using filter fft
+   
+    u_hf(:,ii) = fft_filter(u,Fs, Flow,Fn); 
     
-    %u_hf = fft_filter(u,Fs, 0, ); 
-    
-    %u_lf = fft_filter(u,Fs,) 
+    u_lf(:,ii) = fft_filter(u,Fs,0,Flow); 
     
     %Verifying that u = umean + u_hf + u_lf 
+    u_components(:,ii) = u_hf(:,ii) + u_lf(:,ii); 
     
-    %u_all = umean(ii) + u_hf(ii) + u_lf(ii); 
+    u_all(:,ii)= u_components(:,ii) + umean(ii);
     
     %Comparison of u and umean + u_hf + u_lf 
-    figure() 
-    %plot(u)
+    figure(3)
+    subplot(3,1,ii)
+    plot(u)
     hold on 
-    %plot(u_all) 
+    plot(u_all(:,ii)) 
+    plot(u-u_all(:,ii))
+    xlim([0 4096])
     title(sprintf('Comparison of near bed velocity (u) with umean + u_hf + u_lf for condition %d',ii))
-    %legend('u', 'umean + u_hf + u_lf')
+    legend('u', 'u_m_e_a_n + u_h_f + u_l_f', 'difference')
+    xlabel('Time (s)')
+    ylabel('Velocity (m/s)') 
+    grid on
     
     
-    %Figure of u_hf and u_lw for each condition 
+    %Figure of u_hf and u_lf for each condition 
     figure(5)
     subplot(3,1,ii) 
-    %plot(u_hf) 
+    plot(u_hf(:,ii)) 
     hold on 
-    %plot(u_lf) 
-    %legend('Sea swell', 'Infragravity') 
+    plot(u_lf(:,ii)) 
+    title(sprintf('Sea swell and infragravity velocity components for condition %d',ii))
+    legend('Sea swell (u_h_f)', 'Infragravity (u_l_f)') 
+    xlabel('Time (s)')
+    ylabel('Velocity (m/s)') 
+    xlim([0 4096]) 
+    grid on
     
 end
 
@@ -154,41 +177,43 @@ end
 
 % 7.2.1 Preliminary analysis 
 
+%We run for all datasets 
 for ii = 1:n
     
 %Velocity u - umean 
 
+%We read the velocity from the data 
 u = eval(sprintf('condition%d.data(:,2)', ii)); %cross-shore near bed velocity (m/s)
 
+%We calculate the mean of the velocity 
 umean(ii) = mean(u); %Mean velocity (m/s) 
 
+%We do u minus umean 
 uminusumean = u - umean; % u - umean 
 
-%u_lf = fft_filter(u,Fs,) 
-
+%We read the concentration from the data 
 concentration = eval(sprintf('condition%d.data(:,3)', ii)); %near-bed sediment concentration (kg/mˆ3)
 
-
+%Plot of the u minus umean and u_lf, 
 figure() 
 subplot(2,1,1) 
-plot(uminusumean) 
-%titulo = sprintf('Time evolution of u - $\\bar{u}$ for condition %d', ii)
-%title(titulo,'Interpreter', 'LaTeX')
-title(sprintf('Time evolution of u - u mean for condition %d', ii))
+plot(uminusumean(:,ii)) 
+title(sprintf('Time evolution of u - u_m_e_a_n for condition %d', ii))
 hold on
 grid on 
 ylabel('Cross-shore near bed velocity (m/s)') 
 xlabel('Time (s)') 
-xlim([0 4100])
-%plot(u_lf) 
-%legend('u - u mean', 'u low frequency') 
+xlim([0 300])
+plot(u_lf(:,ii),'k') 
+plot(u_hf(:,ii))
+legend('u - u_m_e_a_n', 'Infragravity velocity (u_l_f)', 'Sea swell velocity (u_h_f)') 
 subplot(2,1,2) 
 plot(concentration)
 title(sprintf('Time evolution of the concentration for condition %d',ii)) 
 grid on 
 xlabel('Time (s)') 
 ylabel('Concentration (kg/mˆ3)')
-xlim([0 4100])
+xlim([0 300])
 
 end
 
@@ -203,47 +228,37 @@ for ii = 1:n
  u = eval(sprintf('condition%d.data(:,2)', ii)) %cross-shore near bed velocity (m/s) 
  c = eval(sprintf('condition%d.data(:,3)', ii)) %near-bed sediment concentration (kg/mˆ3)
 
- %Total sediment transport 
-total_sd(ii) = mean(u.*c); 
+%Total sediment transport 
+q(ii) = mean(u.*c); 
 
 %Calculate the three parts of the sediment transport for each condition
 
 %First term 
 uc(ii) = mean(u)*mean(c); 
 
+%high frequency velocity 
+%u_hf(:,ii) = fft_filter(u,Fs, Flow,Fn); 
 
 %low frequency velocity 
-%u_hf = fft_filter(u,Fs, 0, ); 
-
-%high frequency velocity  
-%u_lf = fft_filter(u,Fs,) 
-
-%low frequency concentration 
-%c_hf = fft_filter(c,Fs, 0, ); 
+%u_lf(:,ii) = fft_filter(u,Fs,0,Flow);
 
 %high frequency concentration  
-%c_lf = fft_filter(c,Fs,) 
+c_hf(:,ii) = fft_filter(c,Fs,Flow,Fn); 
+
+%low frequency concentration 
+c_lf(:,ii) = fft_filter(c,Fs,0,Flow); 
 
 %Second term
 
-%uhf_chf(ii) = mean(u_hf*c_hf); 
+uhf_chf(ii) = mean(u_hf(:,ii).*c_hf(:,ii)); 
 
 %Third term 
-%ulf_clf = mean(u_lf*c_lf); 
+ulf_clf(:,ii) = mean(u_lf(:,ii).*c_lf(:,ii)); 
 
 %Adding the three terms 
 all_terms(ii) = uc(ii) + uhf_chf(ii) + ulf_clf(ii); 
 
 %Check that uc≈uc+ uhfchf + ulfclf.
-
-figure()
-subplot(3,1,ii)
-plot(uc(ii))
-hold on 
-plot(all_terms(ii))
-title(sprintf('Comparison ot total sediment transport and uc+ uhfchf + ulfclf for condition %d', ii)) 
-legend('Total sediment transport','uc+ uhfchf + ulfclf')  
-
 
 end
 
