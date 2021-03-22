@@ -237,7 +237,7 @@ q(ii) = mean(u.*c);
 %Calculate the three parts of the sediment transport for each condition
 
 %First term 
-uc(ii) = mean(u)*mean(c); 
+uc(ii) = mean(u).*mean(c); 
 
 %high frequency concentration  
 c_hf(:,ii) = fft_filter(c,Fs,Flow,Fn); 
