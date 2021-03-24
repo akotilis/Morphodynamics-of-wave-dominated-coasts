@@ -70,12 +70,12 @@ xlabel('r')
 ylabel('Sed. transport (mˆ2/s)') 
 subplot(3,1,2)
 plot(r, Occ, '*k') 
-title('Dimensionless sed. load entrained during the crest period and transported during the crest (Occ)')
+title('Dimensionless sed. load entrained during the crest period and transported during the crest')
 grid on 
 xlabel('r')
 subplot(3,1,3)
-plot(r,Ott, '*r') 
-title('Dimensionless sed. load entrained during the trough period and transported during the trough (Ott)')
+plot(r,Ott, '*') 
+title('Dimensionless sed. load entrained during the trough period and transported during the trough')
 grid on 
 xlabel('r')
 
@@ -130,25 +130,26 @@ xlabel('r')
 ylabel('Sed. transport (mˆ2/s)')
 subplot(5,1,2) 
 plot(r, Occ, '*k') 
-title('Dimensionless sed. load entrained during the crest period and transported during the crest (Occ)')
+title('Dimensionless sed. load entrained during the crest period and transported during the crest')
 grid on 
 xlabel('r')
 subplot(5,1,3) 
 plot(r,Oct, '*m')
-title('Dimensionless sed. load entrained during the crest period and transported during the  trough (Oct)')
+title('Dimensionless sed. load entrained during the crest period and transported during the  trough')
 grid on 
 xlabel('r')
 subplot(5,1,4)
-plot(r, Otc, '*b') 
-title('Dimensionless sed. load entrained during the trough period and transported during the crest (Otc)')
+plot(r, 
+
+subplot(3,1,2)
+plot(r, Occ, '*') 
+title('Dimensionless sed. load entrained during the crest period and transported during the crest')
 grid on 
 xlabel('r')
-subplot(5,1,5)
-plot(r, Ott, '*r')
-title('Dimensionless sed. load entrained during the trough period and transported during the trough (Ott)')
+subplot(3,1,3)
+plot(r,Ott, '*') 
+title('Dimensionless sed. load entrained during the trough period and transported during the trough')
 grid on 
 xlabel('r')
-
-
 
 

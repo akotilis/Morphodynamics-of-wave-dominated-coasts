@@ -150,7 +150,6 @@ for ii = 1: length(theta)
 %We get eta from the BJModel 
 waves = BJmodelEmma(Hrms0(ii),T0(ii),Zeta(ii),theta(ii),profile,hmin);
 
-
 %We now calculate the ursell number 
 ur_waves = ursell_number(waves.k, waves.ht, waves.Hrms);
 
