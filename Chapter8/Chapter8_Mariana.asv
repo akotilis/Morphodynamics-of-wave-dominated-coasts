@@ -22,10 +22,12 @@ phi_names = {'0' '- \pi/2' '- \pi/4'};
 [R(1) beta(1) acceleration{1}] = velocity_acceleration_skewness(u{:,1},t{:,1}); 
 
 figure(1) 
-subplot(4,1,1) 
+%subplot(4,1,1) 
 plot(t{:,1},u{:,1}) 
-title(sprintf('Orbital velocity with r = %d and \\phi = %s ', round(r(1)),phi_names{1})); 
+title('Orbital velocity for different values of r  and \phi') 
+%title(sprintf('Orbital velocity with r = %d and \\phi = %s ', round(r(1)),phi_names{1})); 
 grid on 
+%ylim([-1 2]) 
 ylabel('u (m/s)') 
 xlabel('Time (s)')
 
@@ -37,12 +39,14 @@ for ii = 1:length(phi)
 
 %Plot orbital velocity 
 figure(1)
-subplot(4,1,ii+1) 
+hold on; 
+%subplot(4,1,ii+1) 
 plot(t{:,ii+1},u{:,ii+1}) 
-title(sprintf('Orbital velocity with r = %.1d and \\phi = %s ',round(r(2)), phi_names{ii})); 
+%title(sprintf('Orbital velocity with r = %.1d and \\phi = %s ',round(r(2)), phi_names{ii})); 
 grid on 
-ylabel('u (m/s)') 
-xlabel('Time (s)')
+ylim([-2 2])
+%ylabel('u (m/s)') 
+%xlabel('Time (s)')
 
 %Calculation of R, beta and acceleration for all cases 
 [R(ii+1) beta(ii+1) acceleration{ii+1}] = velocity_acceleration_skewness(u{:,ii+1},t{:,ii+1}); 
@@ -50,6 +54,9 @@ xlabel('Time (s)')
 
 
 end
+
+figure(1)
+legend('r = 0 and \phi = 0', 'r = 0.6 and \phi = 0', 'r = 0.6 and \phi = - \pi/2','r = 0.6 and \phi = - \pi/4')
 
 
 %Plots velocity and acceleration for cases 2 and 3 
@@ -60,12 +67,14 @@ subplot(2,1,1)
 plot(t{2}, u{2})
 title('Time series of orbital velocity for r = 0.6 and \phi = 0 (case 2)') 
 grid on 
+ylim([-2 2]) 
 ylabel('u (m/s)') 
 xlabel('Time (s)')
 subplot(2,1,2) 
-plot(t{2}, acceleration{2}) 
+plot(t{2}, acceleration{2},') 
 title('Time series of acceleration for r = 0.6 and \phi = 0 (case 2)') 
 grid on 
+ylim([-2 2]) 
 ylabel('a (m/sˆ2)') 
 xlabel('Time (s)')
 
@@ -75,12 +84,14 @@ subplot(2,1,1)
 plot(t{3}, u{3})
 title('Time series of orbital velocity for r = 0.6 and \phi = -\pi/2 (case 3)') 
 grid on 
+ylim([-2 2]) 
 ylabel('u (m/s)') 
 xlabel('Time (s)')
 subplot(2,1,2) 
 plot(t{3}, acceleration{3}) 
 title('Time series of acceleration for r = 0.6 and \phi = -\pi/2 (case 3)') 
-grid on 
+grid on
+ylim([-2 2]) 
 ylabel('a (m/sˆ2)') 
 xlabel('Time (s)')
 
@@ -90,6 +101,8 @@ xlabel('Time (s)')
 
 
 
-%% 8.1.2 
+%% 8.1.2 Sediment transport analysis 
+
+
 
 

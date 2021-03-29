@@ -69,17 +69,19 @@ plot(r, Qsx, '*')
 title('Net sediment in the x-direction for assymetric waves (D50 = 0.3 mm)')
 grid on 
 xlabel('r')
-ylabel('Sed. transport (mˆ2/s)') 
+ylabel('Q_s_,_x (mˆ2/s)') 
 subplot(3,1,2)
 plot(r, Occ, '*k') 
 title('Dimensionless sed. load entrained during the crest period and transported during the crest (Occ)')
 grid on 
 xlabel('r')
+ylabel('Occ')
 subplot(3,1,3)
 plot(r,Ott, '*r') 
 title('Dimensionless sed. load entrained during the trough period and transported during the trough (Ott)')
 grid on 
 xlabel('r')
+ylabel('Ott')
 
 
 %% Now for fine sediment (D50 = 0.1 mm) 
@@ -126,27 +128,31 @@ grid on
 title('Net sediment in the x-direction for assymetric waves (D50 = 0.1 mm)')
 grid on 
 xlabel('r')
-ylabel('Sed. transport (mˆ2/s)')
+ylabel('Q_s_,_x (mˆ2/s)')
 subplot(5,1,2) 
 plot(r, Occ, '*k') 
 title('Dimensionless sed. load entrained during the crest period and transported during the crest (Occ)')
 grid on 
 xlabel('r')
+ylabel('Occ')
 subplot(5,1,3) 
 plot(r,Oct, '*m')
 title('Dimensionless sed. load entrained during the crest period and transported during the  trough (Oct)')
 grid on 
 xlabel('r')
+ylabel('Oct')
 subplot(5,1,4)
 plot(r, Otc, '*b') 
 title('Dimensionless sed. load entrained during the trough period and transported during the crest (Otc)')
 grid on 
 xlabel('r')
+ylabel('Otc')
 subplot(5,1,5)
 plot(r, Ott, '*r')
 title('Dimensionless sed. load entrained during the trough period and transported during the trough (Ott)')
 grid on 
 xlabel('r')
+ylabel('Ott')
 
 
 

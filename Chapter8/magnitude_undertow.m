@@ -16,11 +16,9 @@ function Ux = magnitude_undertow(E, Er, c, h, rho, Hrms)
 
 M = E/c + 2*Er/c; 
 
-rho = 1000 %kg/mˆ3 
-
 h_trough = h - Hrms/2; 
 
-Ux = M/(rho*h_trough); 
+Ux = M./(rho*h_trough); 
 
 
 
